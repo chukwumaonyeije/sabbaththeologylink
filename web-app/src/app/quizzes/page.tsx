@@ -80,6 +80,7 @@ function sanitizeQuizArray(rawQuizzes: unknown[]): NonNullable<ListQuizzesData['
 }
 
 const QuizzesPage = () => {
+  console.log('🔥 QUIZZES PAGE COMPONENT LOADING - Latest version e0fe22e');
   const router = useRouter();
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
@@ -100,12 +101,16 @@ const QuizzesPage = () => {
       try {
         setLoading(true);
         setError(null);
+        console.log('🛑 ABOUT TO CALL listQuizzes...');
         const result = await listQuizzes(dataConnect);
-        console.log('Loaded quizzes:', result.data.quizzes);
+        console.log('🚀 listQuizzes RESULT:', result);
         
         // Ensure we have a valid response structure
         const rawQuizzes = result.data?.quizzes || [];
-        console.log('Raw quizzes received:', {
+        console.log('🔍 DETAILED Raw quizzes analysis:', {
+          result,
+          dataExists: !!result.data,
+          quizzesExists: !!result.data?.quizzes,
           count: rawQuizzes?.length || 0,
           data: rawQuizzes,
           hasNulls: rawQuizzes?.some(q => q === null),
