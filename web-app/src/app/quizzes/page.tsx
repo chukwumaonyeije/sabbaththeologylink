@@ -80,7 +80,6 @@ function sanitizeQuizArray(rawQuizzes: unknown[]): NonNullable<ListQuizzesData['
 }
 
 const QuizzesPage = () => {
-  console.log('🔥🚨🔥🚨 QUIZZES PAGE COMPONENT LOADING - EMERGENCY CACHE BUST VERSION cc444b9 - ' + Date.now());
   const router = useRouter();
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');

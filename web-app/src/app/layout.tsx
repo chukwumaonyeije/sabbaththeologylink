@@ -23,10 +23,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // DEPLOYMENT VERIFICATION - FORCE UPDATE cc444b9
-  if (typeof window !== 'undefined') {
-    console.log('🚀🚀🚀🚀🚀 ROOT LAYOUT CLIENT EMERGENCY - Commit cc444b9 FORCE CACHE BUST - ' + Date.now());
-  }
   
   return (
     <html lang="en">
