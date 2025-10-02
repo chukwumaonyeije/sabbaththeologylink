@@ -100,56 +100,18 @@ const QuizzesPage = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('🛑 ABOUT TO CALL listQuizzes...');
         const result = await listQuizzes(dataConnect);
-        console.log('🚀 listQuizzes RESULT:', result);
         
         // Ensure we have a valid response structure
         const rawQuizzes = result.data?.quizzes || [];
-        console.log('🔍 DETAILED Raw quizzes analysis:', {
-          result,
-          dataExists: !!result.data,
-          quizzesExists: !!result.data?.quizzes,
-          count: rawQuizzes?.length || 0,
-          data: rawQuizzes,
-          hasNulls: rawQuizzes?.some(q => q === null),
-          hasUndefined: rawQuizzes?.some(q => q === undefined),
-          types: rawQuizzes?.map(q => typeof q)
-        });
         
-        // First, filter out any null or undefined values from the array
+        // Filter out null or undefined values from the array
         const nonNullQuizzes = Array.isArray(rawQuizzes) 
-          ? rawQuizzes.filter((quiz, index) => {
-              if (quiz === null) {
-                console.warn(`Filtering out null quiz at index ${index}`);
-                return false;
-              }
-              if (quiz === undefined) {
-                console.warn(`Filtering out undefined quiz at index ${index}`);
-                return false;
-              }
-              return true;
-            })
+          ? rawQuizzes.filter(quiz => quiz !== null && quiz !== undefined)
           : [];
-          
-        console.log('After null/undefined filtering:', {
-          original: rawQuizzes?.length || 0,
-          filtered: nonNullQuizzes.length,
-          removed: (rawQuizzes?.length || 0) - nonNullQuizzes.length
-        });
         
         // Use comprehensive validation function
         const validQuizzes = sanitizeQuizArray(nonNullQuizzes);
-        
-        if (validQuizzes.length !== (result.data.quizzes?.length || 0)) {
-          console.warn(`Filtered out ${(result.data.quizzes?.length || 0) - validQuizzes.length} invalid quiz objects`);
-        }
-        
-        console.log('Setting valid quizzes:', {
-          count: validQuizzes.length,
-          hasNulls: validQuizzes.some(q => q === null),
-          sample: validQuizzes[0]
-        });
         
         // Final safety check before setting state
         const safeQuizzes = validQuizzes.filter(quiz => quiz !== null && quiz !== undefined);
@@ -265,8 +227,14 @@ const QuizzesPage = () => {
         {/* Loading State */}
         {loading && (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading quizzes...</p>
+            <div className="relative mx-auto w-16 h-16">
+              <div className="absolute inset-0 rounded-full border-4 border-blue-200"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-600 animate-spin"></div>
+            </div>
+            <div className="mt-6">
+              <p className="text-gray-600 text-lg font-medium">Loading quizzes...</p>
+              <p className="text-gray-500 text-sm mt-1">Preparing your Bible study experience</p>
+            </div>
           </div>
         )}
 

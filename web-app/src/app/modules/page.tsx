@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { listModules, searchModules } from '@dataconnect/generated';
 import { dataConnect } from '@/lib/firebase';
+import { ModuleCardSkeleton } from '@/components/common/SkeletonLoader';
 
 const ModulesPage = () => {
   const [selectedType, setSelectedType] = useState('all');
@@ -315,29 +316,9 @@ const ModulesPage = () => {
 
         {/* Loading State */}
         {loading && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="animate-pulse">
-                  <div className="flex justify-between mb-3">
-                    <div className="h-6 bg-gray-200 rounded w-24"></div>
-                    <div className="h-6 bg-gray-200 rounded w-16"></div>
-                  </div>
-                  <div className="h-6 bg-gray-200 rounded w-full mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-32 mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                  <div className="h-16 bg-gray-200 rounded w-full mb-4"></div>
-                  <div className="flex gap-2 mb-4">
-                    <div className="h-6 bg-gray-200 rounded w-16"></div>
-                    <div className="h-6 bg-gray-200 rounded w-20"></div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="h-4 bg-gray-200 rounded w-16"></div>
-                    <div className="h-8 bg-gray-200 rounded w-20"></div>
-                  </div>
-                </div>
-              </div>
+              <ModuleCardSkeleton key={i} />
             ))}
           </div>
         )}
