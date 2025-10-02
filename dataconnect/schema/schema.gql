@@ -1,0 +1,128 @@
+# SabbathTheologyLink Schema
+# SDA-focused Bible study platform with Sabbath School Quarterly integration
+
+# User table for SDA church members
+type User @table {
+  # Firebase Auth UID
+  id: String! @default(expr: "auth.uid")
+  email: String!
+  name: String!
+  # User preferences and settings
+  bibleVersion: String @default(expr: "'NKJV'")
+  # Timestamps
+  createdAt: Date! @default(expr: "request.time")
+  lastActiveAt: Date @default(expr: "request.time")
+}
+
+# Core content modules: Bible stories, SSQ lessons, Chukwuma Theology posts
+type Module @table {
+  # Auto-generated UUID
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  type: String! # "bible_story", "ssq_lesson", "theology_post"
+  perspective: String! @default(expr: "'SDA'")
+  
+  # Sabbath School Quarterly specific fields
+  quarter: String # e.g., "2024-Q1"
+  week: Int # Week number (1-13)
+  day: String # "monday", "tuesday", etc.
+  
+  # Content
+  memoryText: String # Bible verse for memorization
+  contentHtml: String! # Main lesson content
+  summary: String # Brief summary for cards/previews
+  
+  # Metadata
+  theologyTags: [String!]! # SDA theological concepts
+  difficulty: String @default(expr: "'intermediate'")
+  estimatedReadTime: Int # minutes
+  
+  # Source information
+  sourceUrl: String # Link to official SSQ or original post
+  author: String # Author name
+  
+  # Admin fields
+  isPublished: Boolean! @default(expr: "false")
+  createdAt: Date! @default(expr: "request.time")
+  updatedAt: Date @default(expr: "request.time")
+}
+
+# Quiz questions associated with modules
+type Quiz @table {
+  id: UUID! @default(expr: "uuidV4()")
+  module: Module!
+  title: String!
+  questions: [String!]! # JSON array of question objects
+  createdAt: Date! @default(expr: "request.time")
+}
+
+# Individual quiz questions for better querying
+type Question @table {
+  id: UUID! @default(expr: "uuidV4()")
+  quiz: Quiz!
+  questionText: String!
+  questionType: String! # "mcq", "fill_blank", "true_false"
+  options: [String!] # Multiple choice options (empty for fill-in-blank)
+  correctAnswer: String!
+  explanation: String # Why this answer is correct
+  order: Int! # Question order in quiz
+}
+
+# User progress tracking
+type UserProgress @table(key: ["user", "module"]) {
+  user: User!
+  module: Module!
+  
+  # Progress status
+  status: String! @default(expr: "'not_started'") # "not_started", "in_progress", "completed"
+  progressPercent: Int @default(expr: "0") # 0-100
+  
+  # Quiz performance
+  quizAttempts: Int @default(expr: "0")
+  bestScore: Int @default(expr: "0") # 0-100
+  lastScore: Int @default(expr: "0")
+  
+  # Timestamps
+  startedAt: Date
+  completedAt: Date
+  lastAccessedAt: Date @default(expr: "request.time")
+}
+
+# Quiz attempt records
+type QuizAttempt @table {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User!
+  quiz: Quiz!
+  
+  # Results
+  score: Int! # 0-100
+  totalQuestions: Int!
+  correctAnswers: Int!
+  answers: [String!]! # JSON array of user answers
+  
+  # Timing
+  startedAt: Date! @default(expr: "request.time")
+  completedAt: Date
+  timeSpentMinutes: Int
+}
+
+# User settings and preferences
+type UserSettings @table {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User! @unique
+  
+  # Bible study preferences
+  preferredBibleVersion: String @default(expr: "'NKJV'")
+  dailyReminderEnabled: Boolean @default(expr: "true")
+  weeklyDigestEnabled: Boolean @default(expr: "true")
+  
+  # UI preferences
+  theme: String @default(expr: "'light'")
+  fontSize: String @default(expr: "'medium'")
+  
+  # Notifications
+  emailNotifications: Boolean @default(expr: "true")
+  pushNotifications: Boolean @default(expr: "false")
+  
+  updatedAt: Date @default(expr: "request.time")
+}

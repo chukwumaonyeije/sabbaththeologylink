@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SabbathTheologyLink - SDA Bible Study</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Beautiful, responsive Bible study web app centered on Seventh-day Adventist theological perspectives">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Apple PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SabbathTheologyLink">
+    
+    <!-- Firebase SDKs -->
+    <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/12.3.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary-color: #f8fafc;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --success-color: #059669;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: var(--secondary-color);
+        color: var(--text-primary);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      .app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .header {
+        background: var(--primary-color);
+        color: white;
+        padding: 1rem 0;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      
+      .header p {
+        font-size: 0.875rem;
+        opacity: 0.9;
+      }
+      
+      .nav-tabs {
+        display: flex;
+        background: white;
+        border-bottom: 1px solid var(--border-color);
+        overflow-x: auto;
+      }
+      
+      .nav-tab {
+        flex: 1;
+        min-width: 80px;
+        padding: 1rem;
+        text-align: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+      }
+      
+      .nav-tab:hover {
+        background-color: #f1f5f9;
+        color: var(--primary-color);
+      }
+      
+      .nav-tab.active {
+        color: var(--primary-color);
+        border-bottom-color: var(--primary-color);
+      }
+      
+      .content {
+        flex: 1;
+        padding: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      
+      .tab-panel {
+        display: none;
+      }
+      
+      .tab-panel.active {
+        display: block;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 1rem;
+      }
+      
+      .card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+      
+      .card p {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+      }
+      
+      .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-size: 0.875rem;
+      }
+      
+      .btn:hover {
+        background: var(--primary-dark);
+      }
+      
+      .btn-secondary {
+        background: var(--border-color);
+        color: var(--text-primary);
+      }
+      
+      .btn-secondary:hover {
+        background: #d1d5db;
+      }
+      
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-secondary);
+      }
+      
+      .loading::after {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-left: 8px;
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--text-secondary);
+      }
+      
+      .empty-state h3 {
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+      
+      .auth-form {
+        max-width: 400px;
+        margin: 2rem auto;
+      }
+      
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+      
+      .form-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 1rem;
+      }
+      
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+      
+      @media (max-width: 768px) {
+        .content {
+          padding: 1rem;
+        }
+        
+        .nav-tab {
+          font-size: 0.75rem;
+          padding: 0.75rem 0.5rem;
+        }
+        
+        .card {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Header -->
+      <header class="header">
+        <h1>SabbathTheologyLink</h1>
+        <p>SDA Bible Study & Theology</p>
+      </header>
+      
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="modules">Modules</button>
+        <button class="nav-tab" data-tab="quizzes">Quizzes</button>
+        <button class="nav-tab" data-tab="progress">My Progress</button>
+        <button class="nav-tab" data-tab="admin">Admin</button>
+      </nav>
+      
+      <!-- Main Content -->
+      <main class="content">
+        <!-- Modules Tab -->
+        <div id="modules" class="tab-panel active">
+          <div class="card">
+            <h3>Welcome to SabbathTheologyLink</h3>
+            <p>Explore Sabbath School lessons, Bible studies, and theological content from a Seventh-day Adventist perspective.</p>
+            <div class="empty-state">
+              <h3>No modules available yet</h3>
+              <p>Check back soon for Sabbath School lessons and Bible study modules!</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quizzes Tab -->
+        <div id="quizzes" class="tab-panel">
+          <div class="card">
+            <h3>Bible Study Quizzes</h3>
+            <p>Test your understanding with interactive quizzes based on Sabbath School lessons.</p>
+            <div class="empty-state">
+              <h3>No quizzes available yet</h3>
+              <p>Quizzes will be automatically generated from uploaded content.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- My Progress Tab -->
+        <div id="progress" class="tab-panel">
+          <div class="card">
+            <h3>Learning Progress</h3>
+            <p>Track your Bible study journey and quiz results.</p>
+            <div id="auth-section">
+              <div class="auth-form">
+                <div class="form-group">
+                  <label class="form-label">Email</label>
+                  <input type="email" id="email" class="form-input" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Password</label>
+                  <input type="password" id="password" class="form-input" placeholder="Enter your password">
+                </div>
+                <button class="btn" onclick="signIn()">Sign In</button>
+                <button class="btn btn-secondary" onclick="signUp()">Sign Up</button>
+              </div>
+            </div>
+            <div id="user-progress" style="display: none;">
+              <h4>Your Progress</h4>
+              <div class="empty-state">
+                <p>Complete modules and quizzes to see your progress here.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Admin Tab -->
+        <div id="admin" class="tab-panel">
+          <div class="card">
+            <h3>Content Management</h3>
+            <p>Upload and manage Sabbath School Quarterly content.</p>
+            <div class="empty-state">
+              <h3>Admin access required</h3>
+              <p>Sign in with admin privileges to upload and manage content.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <div id="loading" class="loading">Initializing Firebase...</div>
+
+    <script>
+      // Global variables
+      let auth;
+      let firestore;
+      let currentUser = null;
+      
+      // Initialize Firebase when SDK is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadingEl = document.getElementById('loading');
+        
+        try {
+          // Initialize Firebase services
+          auth = firebase.auth();
+          firestore = firebase.firestore();
+          
+          // Set up auth state listener
+          auth.onAuthStateChanged(user => {
+            currentUser = user;
+            updateUIForUser(user);
+          });
+          
+          loadingEl.style.display = 'none';
+          console.log('Firebase initialized successfully');
+        } catch (e) {
+          console.error('Error initializing Firebase:', e);
+          loadingEl.textContent = 'Error loading Firebase';
+        }
+      });
+      
+      // Tab switching functionality
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('nav-tab')) {
+          const tabId = e.target.dataset.tab;
+          switchTab(tabId);
+        }
+      });
+      
+      function switchTab(tabId) {
+        // Remove active class from all tabs and panels
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+          panel.classList.remove('active');
+        });
+        
+        // Add active class to selected tab and panel
+        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+      }
+      
+      // Authentication functions
+      function signIn() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        if (!email || !password) {
+          alert('Please enter email and password');
+          return;
+        }
+        
+        auth.signInWithEmailAndPassword(email, password)
+          .then(userCredential => {
+            console.log('User signed in:', userCredential.user.email);
+            clearAuthForm();
+          })
+          .catch(error => {
+            console.error('Sign in error:', error);
+            alert('Sign in failed: ' + error.message);
+          });
+      }
+      
+      function signUp() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        if (!email || !password) {
+          alert('Please enter email and password');
+          return;
+        }
+        
+        if (password.length < 6) {
+          alert('Password must be at least 6 characters');
+          return;
+        }
+        
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(userCredential => {
+            console.log('User created:', userCredential.user.email);
+            // Create user document in Firestore
+            return firestore.collection('users').doc(userCredential.user.uid).set({
+              email: userCredential.user.email,
+              name: userCredential.user.email.split('@')[0],
+              progress: [],
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          })
+          .then(() => {
+            clearAuthForm();
+          })
+          .catch(error => {
+            console.error('Sign up error:', error);
+            alert('Sign up failed: ' + error.message);
+          });
+      }
+      
+      function signOut() {
+        auth.signOut().then(() => {
+          console.log('User signed out');
+        });
+      }
+      
+      function clearAuthForm() {
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+      }
+      
+      function updateUIForUser(user) {
+        const authSection = document.getElementById('auth-section');
+        const userProgress = document.getElementById('user-progress');
+        
+        if (user) {
+          // User is signed in
+          authSection.style.display = 'none';
+          userProgress.style.display = 'block';
+          userProgress.innerHTML = `
+            <h4>Welcome, ${user.email}</h4>
+            <button class="btn btn-secondary" onclick="signOut()">Sign Out</button>
+            <div class="empty-state">
+              <p>Complete modules and quizzes to see your progress here.</p>
+            </div>
+          `;
+        } else {
+          // User is signed out
+          authSection.style.display = 'block';
+          userProgress.style.display = 'none';
+        }
+      }
+      
+      // Service Worker registration for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('ServiceWorker registration successful');
+            })
+            .catch(error => {
+              console.log('ServiceWorker registration failed');
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

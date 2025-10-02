@@ -1,0 +1,148 @@
+# Mutations for SabbathTheologyLink - SDA Bible study platform
+
+# Register/update user profile for SDA members
+mutation UpsertUser($name: String!, $email: String!, $bibleVersion: String) @auth(level: USER) {
+  # The "auth.uid" server value ensures that users can only register their own profile
+  user_upsert(data: {
+    id_expr: "auth.uid"
+    name: $name
+    email: $email
+    bibleVersion: $bibleVersion
+  })
+}
+
+# Create a new theological module (admin only for now)
+mutation CreateModule(
+  $title: String!
+  $type: String!
+  $contentHtml: String!
+  $summary: String
+  $memoryText: String
+  $theologyTags: [String!]!
+  $quarter: String
+  $week: Int
+  $day: String
+  $author: String
+  $sourceUrl: String
+  $difficulty: String
+  $estimatedReadTime: Int
+) @auth(level: USER_EMAIL_VERIFIED, insecureReason: "Verified users can create content for review.") {
+  module_insert(data: {
+    title: $title
+    type: $type
+    contentHtml: $contentHtml
+    summary: $summary
+    memoryText: $memoryText
+    theologyTags: $theologyTags
+    quarter: $quarter
+    week: $week
+    day: $day
+    author: $author
+    sourceUrl: $sourceUrl
+    difficulty: $difficulty
+    estimatedReadTime: $estimatedReadTime
+    isPublished: false  # Starts as draft
+  })
+}
+
+# Update user progress when they start/complete a module
+mutation UpdateUserProgress(
+  $moduleId: UUID!
+  $status: String!
+  $progressPercent: Int
+) @auth(level: USER) {
+  userProgress_upsert(data: {
+    userId_expr: "auth.uid"
+    moduleId: $moduleId
+    status: $status
+    progressPercent: $progressPercent
+  })
+}
+
+# Submit quiz attempt and record results
+mutation SubmitQuizAttempt(
+  $quizId: UUID!
+  $score: Int!
+  $totalQuestions: Int!
+  $correctAnswers: Int!
+  $answers: [String!]!
+  $timeSpentMinutes: Int
+) @auth(level: USER) {
+  quizAttempt_insert(data: {
+    userId_expr: "auth.uid"
+    quizId: $quizId
+    score: $score
+    totalQuestions: $totalQuestions
+    correctAnswers: $correctAnswers
+    answers: $answers
+    timeSpentMinutes: $timeSpentMinutes
+  })
+}
+
+# Update user progress with quiz score
+mutation UpdateProgressWithQuizScore(
+  $moduleId: UUID!
+  $score: Int!
+  $attempts: Int!
+) @auth(level: USER) {
+  userProgress_upsert(data: {
+    userId_expr: "auth.uid"
+    moduleId: $moduleId
+    lastScore: $score
+    quizAttempts: $attempts
+    status: "completed"
+    progressPercent: 100
+  })
+}
+
+# Update user settings and preferences
+mutation UpdateUserSettings(
+  $preferredBibleVersion: String
+  $theme: String
+  $fontSize: String
+  $dailyReminderEnabled: Boolean
+  $emailNotifications: Boolean
+) @auth(level: USER) {
+  userSettings_upsert(data: {
+    id_expr: "uuidV4()"
+    userId_expr: "auth.uid"
+    preferredBibleVersion: $preferredBibleVersion
+    theme: $theme
+    fontSize: $fontSize
+    dailyReminderEnabled: $dailyReminderEnabled
+    emailNotifications: $emailNotifications
+  })
+}
+
+# Create a new quiz
+mutation CreateQuiz(
+  $title: String!
+  $moduleId: UUID
+) @auth(level: USER_EMAIL_VERIFIED, insecureReason: "Verified users can create quizzes for review.") {
+  quiz_insert(data: {
+    title: $title
+    moduleId: $moduleId
+    questions: []
+  })
+}
+
+# Create quiz questions
+mutation CreateQuestion(
+  $quizId: UUID!
+  $questionText: String!
+  $questionType: String!
+  $options: [String!]
+  $correctAnswer: String!
+  $explanation: String
+  $order: Int!
+) @auth(level: USER_EMAIL_VERIFIED, insecureReason: "Verified users can create questions.") {
+  question_insert(data: {
+    quizId: $quizId
+    questionText: $questionText
+    questionType: $questionType
+    options: $options
+    correctAnswer: $correctAnswer
+    explanation: $explanation
+    order: $order
+  })
+}

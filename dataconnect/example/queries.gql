@@ -1,0 +1,206 @@
+# Queries for SabbathTheologyLink - SDA Bible study platform
+
+# @auth() directives control who can call each operation.
+# Anyone should be able to list published modules for public study
+query ListModules @auth(level: PUBLIC, insecureReason: "Anyone can view published study modules.") {
+  modules(where: { isPublished: { eq: true } }) {
+    id
+    title
+    type
+    quarter
+    week
+    day
+    memoryText
+    summary
+    theologyTags
+    difficulty
+    estimatedReadTime
+    author
+    createdAt
+  }
+}
+
+# Get modules for a specific Sabbath School quarter
+query GetQuarterModules($quarter: String!) @auth(level: PUBLIC, insecureReason: "Anyone can view SSQ modules.") {
+  modules(
+    where: {
+      _and: [
+        { quarter: { eq: $quarter } }
+        { isPublished: { eq: true } }
+        { type: { eq: "ssq_lesson" } }
+      ]
+    }
+    orderBy: [{ week: ASC }, { day: ASC }]
+  ) {
+    id
+    title
+    week
+    day
+    memoryText
+    summary
+    theologyTags
+    estimatedReadTime
+    createdAt
+  }
+}
+
+# Get a specific module with full content
+query GetModuleById($id: UUID!) @auth(level: PUBLIC, insecureReason: "Anyone can view individual modules.") {
+  module(id: $id) {
+    id
+    title
+    type
+    perspective
+    quarter
+    week
+    day
+    memoryText
+    contentHtml
+    summary
+    theologyTags
+    difficulty
+    estimatedReadTime
+    sourceUrl
+    author
+    createdAt
+    # Get associated quiz
+    quizzes: quizzes_on_module {
+      id
+      title
+      questions: questions_on_quiz {
+        id
+        questionText
+        questionType
+        options
+        explanation
+        order
+      }
+    }
+  }
+}
+
+# Get user's progress on all modules
+query GetUserProgress @auth(level: USER) {
+  user(key: { id_expr: "auth.uid" }) {
+    id
+    name
+    bibleVersion
+    progress: userProgresses_on_user {
+      status
+      progressPercent
+      bestScore
+      lastScore
+      quizAttempts
+      completedAt
+      lastAccessedAt
+      module {
+        id
+        title
+        type
+        quarter
+        week
+        day
+      }
+    }
+  }
+}
+
+# Get user's quiz attempts for analytics
+query GetUserQuizHistory @auth(level: USER) {
+  quizAttempts(
+    where: { userId: { eq_expr: "auth.uid" } }
+    orderBy: { completedAt: DESC }
+    limit: 50
+  ) {
+    id
+    score
+    totalQuestions
+    correctAnswers
+    completedAt
+    timeSpentMinutes
+    quiz {
+      title
+      module {
+        title
+        type
+      }
+    }
+  }
+}
+
+# Search modules by content, tags, or title
+query SearchModules($searchTerm: String, $type: String, $tags: [String!]) @auth(level: PUBLIC, insecureReason: "Anyone can search modules.") {
+  modules(
+    where: {
+      _and: [
+        { isPublished: { eq: true } }
+        { type: { eq: $type } }
+        { _or: [
+          { title: { contains: $searchTerm } }
+          { summary: { contains: $searchTerm } }
+        ]}
+      ]
+    }
+    limit: 20
+  ) {
+    id
+    title
+    type
+    summary
+    theologyTags
+    quarter
+    week
+    day
+    author
+    createdAt
+  }
+}
+
+# List all quizzes
+query ListQuizzes @auth(level: PUBLIC, insecureReason: "Anyone can view available quizzes.") {
+  quizzes {
+    id
+    title
+    createdAt
+    module {
+      id
+      title
+      type
+      difficulty
+      theologyTags
+    }
+    questions: questions_on_quiz {
+      id
+      questionText
+      questionType
+      options
+      explanation
+      order
+    }
+  }
+}
+
+# Get quiz by ID with questions
+query GetQuizById($id: UUID!) @auth(level: PUBLIC, insecureReason: "Anyone can view quiz details.") {
+  quiz(id: $id) {
+    id
+    title
+    createdAt
+    module {
+      id
+      title
+      type
+      difficulty
+      theologyTags
+    }
+    questions: questions_on_quiz(orderBy: { order: ASC }) {
+      id
+      questionText
+      questionType
+      options
+      correctAnswer
+      explanation
+      order
+    }
+  }
+}

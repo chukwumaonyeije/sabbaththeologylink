@@ -1,0 +1,22 @@
+# Vercel Environment Variables for SabbathTheologyLink
+# Copy and paste these into the Vercel Dashboard (Project Settings > Environment Variables)
+
+# Firebase Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAamVOgH_4fse26cxOURwLSOzeoKFwB8ws
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=sabbaththeologylink.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=sabbaththeologylink
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=sabbaththeologylink.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=710694348415
+NEXT_PUBLIC_FIREBASE_APP_ID=1:710694348415:web:f9bf6761128501725d414a
+
+# DataConnect Configuration (placeholder values - will need to be updated after DataConnect is set up)
+NEXT_PUBLIC_DATACONNECT_CONNECTOR_ID=your_connector_id_here
+NEXT_PUBLIC_DATACONNECT_SERVICE_ID=your_service_id_here
+NEXT_PUBLIC_DATACONNECT_SERVICE_LOCATION=us-central1
+
+# Instructions:
+# 1. Go to https://vercel.com/dashboard
+# 2. Select your sabbaththeologylink project
+# 3. Go to Settings > Environment Variables
+# 4. Add each variable above one by one for Production, Preview, and Development environments
+# 5. Redeploy the app to apply the changes

@@ -1,0 +1,124 @@
+[
+  {
+    "title": "Recipe for Success — Joshua 1",
+    "moduleId": null,
+    "questions": [
+      {
+        "questionText": "In Joshua 1, which four movements outline the book's structure?",
+        "questionType": "mcq",
+        "options": ["Cross, Take, Divide, Serve", "Call, Conquer, Covenant, Crown", "Promise, Pilgrimage, Purge, Peace", "Lead, Listen, Learn, Live"],
+        "correctAnswer": "Cross, Take, Divide, Serve",
+        "explanation": "Joshua's opening chapter previews four sections: Cross (1:1–5:12), Take (5:13–12:24), Divide (13:1–21:45), and Service (22:1–24:33).",
+        "order": 1
+      },
+      {
+        "questionText": "What is the primary ground of Israel's success in Joshua 1?",
+        "questionType": "mcq",
+        "options": ["Superior weapons", "Allied nations", "The Lord's presence", "Numerical advantage"],
+        "correctAnswer": "The Lord's presence",
+        "explanation": "God promises, \"I will be with you.\" The presence of the Lord is decisive.",
+        "order": 2
+      },
+      {
+        "questionText": "The phrase \"I have given you the land\" in Joshua 1:3 is best understood as:",
+        "questionType": "mcq",
+        "options": ["Hyperbole", "Prophetic perfect (assured promise)", "Military boast", "Poetic metaphor only"],
+        "correctAnswer": "Prophetic perfect (assured promise)",
+        "explanation": "When God speaks, the perfect form signals an assured outcome—the 'prophetic perfect.'",
+        "order": 3
+      },
+      {
+        "questionText": "Why is Joshua told twice to be strong and courageous?",
+        "questionType": "mcq",
+        "options": ["To improve swordsmanship", "To bolster morale only", "To remain faithful to Torah in daunting circumstances", "Because he doubted the spies"],
+        "correctAnswer": "To remain faithful to Torah in daunting circumstances",
+        "explanation": "Strength and courage are tied to faithful obedience to the Torah amid overwhelming odds.",
+        "order": 4
+      },
+      {
+        "questionText": "In biblical perspective (Josh 1; Ps 1), 'success' (tsalakh/sakal) primarily means:",
+        "questionType": "mcq",
+        "options": ["Guaranteed wealth", "Social status", "Harmony with God's wisdom and obedience to His Word", "Political power"],
+        "correctAnswer": "Harmony with God's wisdom and obedience to His Word",
+        "explanation": "Success is acting wisely under God's law, not merely material gain.",
+        "order": 5
+      }
+    ]
+  },
+  {
+    "title": "The Sabbath Truth Quiz",
+    "moduleId": null,
+    "questions": [
+      {
+        "questionText": "Which day of the week is the biblical Sabbath?",
+        "questionType": "mcq",
+        "options": ["Sunday", "Saturday", "Friday", "Any day of rest"],
+        "correctAnswer": "Saturday",
+        "explanation": "The seventh day (Saturday) is the biblical Sabbath, as established in Genesis 2:2-3 and confirmed in the Fourth Commandment.",
+        "order": 1
+      },
+      {
+        "questionText": "The Sabbath was made holy at:",
+        "questionType": "mcq",
+        "options": ["Mount Sinai", "Creation", "The Exodus", "Calvary"],
+        "correctAnswer": "Creation",
+        "explanation": "Genesis 2:3 shows that God blessed and sanctified the seventh day at creation, before sin entered the world.",
+        "order": 2
+      },
+      {
+        "questionText": "Jesus said the Sabbath was made for:",
+        "questionType": "mcq",
+        "options": ["The Jews only", "Christians only", "Mankind", "The apostles"],
+        "correctAnswer": "Mankind",
+        "explanation": "In Mark 2:27, Jesus said 'The Sabbath was made for man, not man for the Sabbath,' indicating it's for all humanity.",
+        "order": 3
+      },
+      {
+        "questionText": "The Fourth Commandment begins with which word?",
+        "questionType": "mcq",
+        "options": ["Keep", "Remember", "Observe", "Honor"],
+        "correctAnswer": "Remember",
+        "explanation": "Exodus 20:8 begins 'Remember the Sabbath day, to keep it holy,' emphasizing that the Sabbath already existed.",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "title": "Sanctuary Truth Assessment",
+    "moduleId": null,
+    "questions": [
+      {
+        "questionText": "In 1844, Christ entered which apartment of the heavenly sanctuary?",
+        "questionType": "mcq",
+        "options": ["The Holy Place", "The Most Holy Place", "The Court", "The Altar"],
+        "correctAnswer": "The Most Holy Place",
+        "explanation": "According to Daniel 8:14 and Adventist understanding, Christ entered the Most Holy Place in 1844 to begin the investigative judgment.",
+        "order": 1
+      },
+      {
+        "questionText": "The investigative judgment examines the records of:",
+        "questionType": "mcq",
+        "options": ["Angels only", "The lost only", "All who have professed faith in God", "Church leaders only"],
+        "correctAnswer": "All who have professed faith in God",
+        "explanation": "The investigative judgment reviews the cases of all who have claimed to follow God, determining who will receive eternal life.",
+        "order": 2
+      },
+      {
+        "questionText": "The earthly sanctuary was a copy of:",
+        "questionType": "mcq",
+        "options": ["Egyptian temples", "Heavenly things", "Solomon's temple", "Human imagination"],
+        "correctAnswer": "Heavenly things",
+        "explanation": "Hebrews 8:5 states that the earthly sanctuary was 'a copy and shadow of heavenly things.'",
+        "order": 3
+      },
+      {
+        "questionText": "What does the incense in the sanctuary represent?",
+        "questionType": "mcq",
+        "options": ["Good works", "The prayers of the saints", "Church traditions", "Spiritual gifts"],
+        "correctAnswer": "The prayers of the saints",
+        "explanation": "Revelation 8:3-4 shows that incense represents 'the prayers of all saints' offered before God's throne.",
+        "order": 4
+      }
+    ]
+  }
+]

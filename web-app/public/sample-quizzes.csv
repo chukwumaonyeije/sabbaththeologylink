@@ -1,0 +1,6 @@
+title,questionText,questionType,correctAnswer,options,explanation,moduleId
+"Sabbath Truth Quiz","Which day of the week is the biblical Sabbath?",mcq,"Saturday","Sunday|Saturday|Friday|Any day of rest","The seventh day (Saturday) is the biblical Sabbath, as established in Genesis 2:2-3 and confirmed in the Fourth Commandment.",
+"Sabbath Truth Quiz","The Sabbath was made holy at creation.",true_false,"True",,"Genesis 2:3 shows that God blessed and sanctified the seventh day at creation, before sin entered the world.",
+"Sabbath Truth Quiz","Complete this verse: Remember the _____ day to keep it holy.",fill_blank,"Sabbath",,"This is from Exodus 20:8, the Fourth Commandment.",
+"Daniel's Prophecy Quiz","How many years did Daniel serve in Babylon?",mcq,"Over 65 years","50 years|Over 65 years|40 years|30 years","Daniel served from the reign of Nebuchadnezzar through Cyrus, spanning over 65 years.",
+"Daniel's Prophecy Quiz","The statue in Nebuchadnezzar's dream represented world kingdoms.",true_false,"True",,"Daniel 2 explains that the statue represented successive world empires from Babylon to God's eternal kingdom."
