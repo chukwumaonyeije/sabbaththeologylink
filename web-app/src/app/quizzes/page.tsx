@@ -401,16 +401,47 @@ const QuizzesPage = () => {
 
         {/* Quizzes Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {Array.isArray(filteredQuizzes) ? filteredQuizzes.map((quiz, index) => {
+          {Array.isArray(filteredQuizzes) ? filteredQuizzes
+            .filter((quiz) => {
+              // EMERGENCY: Final null filtering right before render
+              if (quiz === null || quiz === undefined) {
+                console.error('EMERGENCY FILTER: Found null/undefined quiz in filteredQuizzes');
+                return false;
+              }
+              if (!quiz || typeof quiz !== 'object') {
+                console.error('EMERGENCY FILTER: Invalid quiz object:', quiz);
+                return false;
+              }
+              return true;
+            })
+            .map((quiz, index) => {
+            // EMERGENCY LOGGING: Log every quiz before processing
+            console.log(`Processing quiz ${index}:`, {
+              quiz,
+              isNull: quiz === null,
+              isUndefined: quiz === undefined,
+              type: typeof quiz,
+              hasTitle: quiz?.title,
+              hasId: quiz?.id
+            });
+            
             try {
-              // Explicit null/undefined checks
+              // TRIPLE CHECK: Emergency null/undefined validation
               if (quiz === null) {
-                console.error(`Quiz at index ${index} is null during render`);
-                return null;
+                console.error(`RENDER ERROR: Quiz at index ${index} is null during render`);
+                return (
+                  <div key={`null-${index}`} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="text-red-600 text-sm">Error: Null quiz data detected</p>
+                  </div>
+                );
               }
               if (quiz === undefined) {
-                console.error(`Quiz at index ${index} is undefined during render`);
-                return null;
+                console.error(`RENDER ERROR: Quiz at index ${index} is undefined during render`);
+                return (
+                  <div key={`undefined-${index}`} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="text-red-600 text-sm">Error: Undefined quiz data detected</p>
+                  </div>
+                );
               }
               
               // Comprehensive validation before rendering
@@ -424,24 +455,36 @@ const QuizzesPage = () => {
                 return null;
               }
             
+            // EMERGENCY: Safe object destructuring with defaults
+            const safeQuiz = {
+              ...(quiz || {}),
+              id: quiz?.id || `error-${index}`,
+              title: quiz?.title || 'Untitled Quiz',
+              questions: quiz?.questions || [],
+              module: quiz?.module || null
+            };
+            
+            // EMERGENCY: Log the safe quiz object
+            console.log(`Safe quiz ${index}:`, safeQuiz);
+            
             // Estimate time based on number of questions (2 minutes per question)
-            const estimatedTime = Math.max(5, (quiz?.questions?.length || 0) * 2);
+            const estimatedTime = Math.max(5, (safeQuiz.questions?.length || 0) * 2);
             
             return (
-              <div key={quiz.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+              <div key={safeQuiz.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                 <div className="p-4 sm:p-6">
                   {/* Quiz Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {quiz?.title || 'Untitled Quiz'}
+                        {safeQuiz.title}
                       </h3>
                       <p className="text-sm text-gray-600 mb-2">
-                        Based on: {quiz?.module?.title || 'Standalone Quiz'}
+                        Based on: {safeQuiz.module?.title || 'Standalone Quiz'}
                       </p>
                     </div>
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(quiz?.module?.difficulty || 'intermediate')}`}>
-                      {quiz?.module?.difficulty || 'intermediate'}
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(safeQuiz.module?.difficulty || 'intermediate')}`}>
+                      {safeQuiz.module?.difficulty || 'intermediate'}
                     </span>
                   </div>
 
@@ -449,7 +492,7 @@ const QuizzesPage = () => {
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="text-center p-3 bg-gray-50 rounded-md">
                       <p className="text-sm text-gray-600">Questions</p>
-                      <p className="text-lg font-semibold text-gray-900">{quiz?.questions?.length || 0}</p>
+                      <p className="text-lg font-semibold text-gray-900">{safeQuiz.questions?.length || 0}</p>
                     </div>
                     <div className="text-center p-3 bg-gray-50 rounded-md">
                       <p className="text-sm text-gray-600">Est. Time</p>
@@ -467,7 +510,7 @@ const QuizzesPage = () => {
                   {/* Topics */}
                   <div className="mb-4">
                     <div className="flex flex-wrap gap-1">
-                      {quiz?.module?.theologyTags?.map((topic) => (
+                      {safeQuiz.module?.theologyTags?.map((topic) => (
                         <span key={topic} className="inline-flex items-center px-2 py-1 rounded text-xs bg-blue-100 text-blue-800">
                           {topic}
                         </span>
@@ -487,7 +530,7 @@ const QuizzesPage = () => {
                       </span>
                     </div>
                     <button 
-                      onClick={() => router.push(`/quizzes/${quiz?.id || 'unknown'}`)}
+                      onClick={() => router.push(`/quizzes/${safeQuiz.id}`)}
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                     >
                       Start Quiz
