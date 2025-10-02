@@ -332,102 +332,6 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
-interface ListModulesRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<ListModulesData, undefined>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<ListModulesData, undefined>;
-  operationName: string;
-}
-export const listModulesRef: ListModulesRef;
-
-export function listModules(): QueryPromise<ListModulesData, undefined>;
-export function listModules(dc: DataConnect): QueryPromise<ListModulesData, undefined>;
-
-interface GetQuarterModulesRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: GetQuarterModulesVariables): QueryRef<GetQuarterModulesData, GetQuarterModulesVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetQuarterModulesVariables): QueryRef<GetQuarterModulesData, GetQuarterModulesVariables>;
-  operationName: string;
-}
-export const getQuarterModulesRef: GetQuarterModulesRef;
-
-export function getQuarterModules(vars: GetQuarterModulesVariables): QueryPromise<GetQuarterModulesData, GetQuarterModulesVariables>;
-export function getQuarterModules(dc: DataConnect, vars: GetQuarterModulesVariables): QueryPromise<GetQuarterModulesData, GetQuarterModulesVariables>;
-
-interface GetModuleByIdRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: GetModuleByIdVariables): QueryRef<GetModuleByIdData, GetModuleByIdVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetModuleByIdVariables): QueryRef<GetModuleByIdData, GetModuleByIdVariables>;
-  operationName: string;
-}
-export const getModuleByIdRef: GetModuleByIdRef;
-
-export function getModuleById(vars: GetModuleByIdVariables): QueryPromise<GetModuleByIdData, GetModuleByIdVariables>;
-export function getModuleById(dc: DataConnect, vars: GetModuleByIdVariables): QueryPromise<GetModuleByIdData, GetModuleByIdVariables>;
-
-interface GetUserProgressRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetUserProgressData, undefined>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<GetUserProgressData, undefined>;
-  operationName: string;
-}
-export const getUserProgressRef: GetUserProgressRef;
-
-export function getUserProgress(): QueryPromise<GetUserProgressData, undefined>;
-export function getUserProgress(dc: DataConnect): QueryPromise<GetUserProgressData, undefined>;
-
-interface GetUserQuizHistoryRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetUserQuizHistoryData, undefined>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<GetUserQuizHistoryData, undefined>;
-  operationName: string;
-}
-export const getUserQuizHistoryRef: GetUserQuizHistoryRef;
-
-export function getUserQuizHistory(): QueryPromise<GetUserQuizHistoryData, undefined>;
-export function getUserQuizHistory(dc: DataConnect): QueryPromise<GetUserQuizHistoryData, undefined>;
-
-interface SearchModulesRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars?: SearchModulesVariables): QueryRef<SearchModulesData, SearchModulesVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars?: SearchModulesVariables): QueryRef<SearchModulesData, SearchModulesVariables>;
-  operationName: string;
-}
-export const searchModulesRef: SearchModulesRef;
-
-export function searchModules(vars?: SearchModulesVariables): QueryPromise<SearchModulesData, SearchModulesVariables>;
-export function searchModules(dc: DataConnect, vars?: SearchModulesVariables): QueryPromise<SearchModulesData, SearchModulesVariables>;
-
-interface ListQuizzesRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<ListQuizzesData, undefined>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<ListQuizzesData, undefined>;
-  operationName: string;
-}
-export const listQuizzesRef: ListQuizzesRef;
-
-export function listQuizzes(): QueryPromise<ListQuizzesData, undefined>;
-export function listQuizzes(dc: DataConnect): QueryPromise<ListQuizzesData, undefined>;
-
-interface GetQuizByIdRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: GetQuizByIdVariables): QueryRef<GetQuizByIdData, GetQuizByIdVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetQuizByIdVariables): QueryRef<GetQuizByIdData, GetQuizByIdVariables>;
-  operationName: string;
-}
-export const getQuizByIdRef: GetQuizByIdRef;
-
-export function getQuizById(vars: GetQuizByIdVariables): QueryPromise<GetQuizByIdData, GetQuizByIdVariables>;
-export function getQuizById(dc: DataConnect, vars: GetQuizByIdVariables): QueryPromise<GetQuizByIdData, GetQuizByIdVariables>;
-
 interface UpsertUserRef {
   /* Allow users to create refs without passing in DataConnect */
   (vars: UpsertUserVariables): MutationRef<UpsertUserData, UpsertUserVariables>;
@@ -523,4 +427,100 @@ export const createQuestionRef: CreateQuestionRef;
 
 export function createQuestion(vars: CreateQuestionVariables): MutationPromise<CreateQuestionData, CreateQuestionVariables>;
 export function createQuestion(dc: DataConnect, vars: CreateQuestionVariables): MutationPromise<CreateQuestionData, CreateQuestionVariables>;
+
+interface ListModulesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<ListModulesData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<ListModulesData, undefined>;
+  operationName: string;
+}
+export const listModulesRef: ListModulesRef;
+
+export function listModules(): QueryPromise<ListModulesData, undefined>;
+export function listModules(dc: DataConnect): QueryPromise<ListModulesData, undefined>;
+
+interface GetQuarterModulesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetQuarterModulesVariables): QueryRef<GetQuarterModulesData, GetQuarterModulesVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetQuarterModulesVariables): QueryRef<GetQuarterModulesData, GetQuarterModulesVariables>;
+  operationName: string;
+}
+export const getQuarterModulesRef: GetQuarterModulesRef;
+
+export function getQuarterModules(vars: GetQuarterModulesVariables): QueryPromise<GetQuarterModulesData, GetQuarterModulesVariables>;
+export function getQuarterModules(dc: DataConnect, vars: GetQuarterModulesVariables): QueryPromise<GetQuarterModulesData, GetQuarterModulesVariables>;
+
+interface GetModuleByIdRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetModuleByIdVariables): QueryRef<GetModuleByIdData, GetModuleByIdVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetModuleByIdVariables): QueryRef<GetModuleByIdData, GetModuleByIdVariables>;
+  operationName: string;
+}
+export const getModuleByIdRef: GetModuleByIdRef;
+
+export function getModuleById(vars: GetModuleByIdVariables): QueryPromise<GetModuleByIdData, GetModuleByIdVariables>;
+export function getModuleById(dc: DataConnect, vars: GetModuleByIdVariables): QueryPromise<GetModuleByIdData, GetModuleByIdVariables>;
+
+interface GetUserProgressRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetUserProgressData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<GetUserProgressData, undefined>;
+  operationName: string;
+}
+export const getUserProgressRef: GetUserProgressRef;
+
+export function getUserProgress(): QueryPromise<GetUserProgressData, undefined>;
+export function getUserProgress(dc: DataConnect): QueryPromise<GetUserProgressData, undefined>;
+
+interface GetUserQuizHistoryRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetUserQuizHistoryData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<GetUserQuizHistoryData, undefined>;
+  operationName: string;
+}
+export const getUserQuizHistoryRef: GetUserQuizHistoryRef;
+
+export function getUserQuizHistory(): QueryPromise<GetUserQuizHistoryData, undefined>;
+export function getUserQuizHistory(dc: DataConnect): QueryPromise<GetUserQuizHistoryData, undefined>;
+
+interface SearchModulesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars?: SearchModulesVariables): QueryRef<SearchModulesData, SearchModulesVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars?: SearchModulesVariables): QueryRef<SearchModulesData, SearchModulesVariables>;
+  operationName: string;
+}
+export const searchModulesRef: SearchModulesRef;
+
+export function searchModules(vars?: SearchModulesVariables): QueryPromise<SearchModulesData, SearchModulesVariables>;
+export function searchModules(dc: DataConnect, vars?: SearchModulesVariables): QueryPromise<SearchModulesData, SearchModulesVariables>;
+
+interface ListQuizzesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<ListQuizzesData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<ListQuizzesData, undefined>;
+  operationName: string;
+}
+export const listQuizzesRef: ListQuizzesRef;
+
+export function listQuizzes(): QueryPromise<ListQuizzesData, undefined>;
+export function listQuizzes(dc: DataConnect): QueryPromise<ListQuizzesData, undefined>;
+
+interface GetQuizByIdRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetQuizByIdVariables): QueryRef<GetQuizByIdData, GetQuizByIdVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetQuizByIdVariables): QueryRef<GetQuizByIdData, GetQuizByIdVariables>;
+  operationName: string;
+}
+export const getQuizByIdRef: GetQuizByIdRef;
+
+export function getQuizById(vars: GetQuizByIdVariables): QueryPromise<GetQuizByIdData, GetQuizByIdVariables>;
+export function getQuizById(dc: DataConnect, vars: GetQuizByIdVariables): QueryPromise<GetQuizByIdData, GetQuizByIdVariables>;
 

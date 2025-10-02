@@ -6,6 +6,70 @@ import AppLayout from '@/components/layout/AppLayout';
 import { dataConnect } from '@/lib/firebase';
 import { listQuizzes, ListQuizzesData } from '@/dataconnect-generated';
 
+// Type guard and validation functions
+function isValidQuizObject(quiz: unknown): quiz is NonNullable<ListQuizzesData['quizzes'][0]> {
+  if (!quiz || typeof quiz !== 'object') {
+    console.warn('Quiz validation failed: not an object', quiz);
+    return false;
+  }
+  
+  const quizObj = quiz as Record<string, unknown>;
+  
+  if (!quizObj.id || typeof quizObj.id !== 'string') {
+    console.warn('Quiz validation failed: invalid id', quiz);
+    return false;
+  }
+  
+  if (!quizObj.title || typeof quizObj.title !== 'string') {
+    console.warn('Quiz validation failed: invalid title', quiz);
+    return false;
+  }
+  
+  if (!Array.isArray(quizObj.questions) || quizObj.questions.length === 0) {
+    console.warn('Quiz validation failed: invalid questions', quiz);
+    return false;
+  }
+  
+  // Validate module structure if present
+  if (quizObj.module !== null && quizObj.module !== undefined) {
+    if (typeof quizObj.module !== 'object') {
+      console.warn('Quiz validation failed: invalid module structure', quiz);
+      return false;
+    }
+    const moduleObj = quizObj.module as Record<string, unknown>;
+    // Check critical module properties
+    if (moduleObj.title && typeof moduleObj.title !== 'string') {
+      console.warn('Quiz validation failed: invalid module title', quiz);
+      return false;
+    }
+    if (moduleObj.theologyTags && !Array.isArray(moduleObj.theologyTags)) {
+      console.warn('Quiz validation failed: invalid theology tags', quiz);
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+function sanitizeQuizArray(rawQuizzes: unknown[]): NonNullable<ListQuizzesData['quizzes'][0]>[] {
+  if (!Array.isArray(rawQuizzes)) {
+    console.error('Quiz data is not an array:', rawQuizzes);
+    return [];
+  }
+  
+  const validQuizzes: NonNullable<ListQuizzesData['quizzes'][0]>[] = [];
+  
+  rawQuizzes.forEach((quiz, index) => {
+    if (isValidQuizObject(quiz)) {
+      validQuizzes.push(quiz);
+    } else {
+      console.warn(`Filtering out invalid quiz at index ${index}:`, quiz);
+    }
+  });
+  
+  return validQuizzes;
+}
+
 const QuizzesPage = () => {
   const router = useRouter();
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
@@ -34,38 +98,8 @@ const QuizzesPage = () => {
         const rawQuizzes = result.data?.quizzes || [];
         console.log('Raw quizzes received:', rawQuizzes);
         
-        // Filter out any null or invalid quiz objects with comprehensive validation
-        const validQuizzes = rawQuizzes.filter(quiz => {
-          if (!quiz || typeof quiz !== 'object') {
-            console.warn('Invalid quiz object (not an object):', quiz);
-            return false;
-          }
-          
-          if (!quiz.id || typeof quiz.id !== 'string') {
-            console.warn('Quiz missing or invalid id:', quiz);
-            return false;
-          }
-          
-          if (!quiz.title || typeof quiz.title !== 'string') {
-            console.warn('Quiz missing or invalid title:', quiz);
-            return false;
-          }
-          
-          if (!quiz.questions || !Array.isArray(quiz.questions) || quiz.questions.length === 0) {
-            console.warn('Quiz missing or invalid questions:', quiz);
-            return false;
-          }
-          
-          // Validate module structure if present
-          if (quiz.module !== null && quiz.module !== undefined) {
-            if (typeof quiz.module !== 'object') {
-              console.warn('Quiz has invalid module structure:', quiz);
-              return false;
-            }
-          }
-          
-          return true;
-        });
+        // Use comprehensive validation function
+        const validQuizzes = sanitizeQuizArray(rawQuizzes);
         
         if (validQuizzes.length !== result.data.quizzes.length) {
           console.warn(`Filtered out ${result.data.quizzes.length - validQuizzes.length} invalid quiz objects`);
@@ -314,18 +348,19 @@ const QuizzesPage = () => {
 
         {/* Quizzes Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {filteredQuizzes.map((quiz) => {
-            // Comprehensive validation before rendering
-            if (!quiz || 
-                typeof quiz !== 'object' || 
-                !quiz.id || 
-                !quiz.title || 
-                typeof quiz.title !== 'string' ||
-                !Array.isArray(quiz.questions) ||
-                quiz.questions.length === 0) {
-              console.warn('Skipping invalid quiz in render:', quiz);
-              return null;
-            }
+          {Array.isArray(filteredQuizzes) ? filteredQuizzes.map((quiz, index) => {
+            try {
+              // Comprehensive validation before rendering
+              if (!quiz || 
+                  typeof quiz !== 'object' || 
+                  !quiz.id || 
+                  !quiz.title || 
+                  typeof quiz.title !== 'string' ||
+                  !Array.isArray(quiz.questions) ||
+                  quiz.questions.length === 0) {
+                console.warn('Skipping invalid quiz in render:', quiz);
+                return null;
+              }
             
             // Estimate time based on number of questions (2 minutes per question)
             const estimatedTime = Math.max(5, quiz.questions.length * 2);
@@ -399,7 +434,24 @@ const QuizzesPage = () => {
                 </div>
               </div>
             );
-          })}
+            } catch (error) {
+              console.error('Error rendering quiz at index', index, ':', error);
+              return (
+                <div key={`error-${index}`} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="text-center text-red-600">
+                    <p className="text-sm font-medium">Error loading quiz</p>
+                    <p className="text-xs">Please try refreshing the page</p>
+                  </div>
+                </div>
+              );
+            }
+          }) : (
+            <div className="col-span-full text-center py-12">
+              <div className="text-6xl mb-4">⚠️</div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Data loading error</h3>
+              <p className="text-gray-600">Unable to load quiz data. Please try refreshing the page.</p>
+            </div>
+          )}
         </div>
 
         {/* Empty State */}

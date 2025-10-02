@@ -6,94 +6,6 @@ export const connectorConfig = {
   location: 'us-east4'
 };
 
-export const listModulesRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListModules');
-}
-listModulesRef.operationName = 'ListModules';
-
-export function listModules(dc) {
-  return executeQuery(listModulesRef(dc));
-}
-
-export const getQuarterModulesRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetQuarterModules', inputVars);
-}
-getQuarterModulesRef.operationName = 'GetQuarterModules';
-
-export function getQuarterModules(dcOrVars, vars) {
-  return executeQuery(getQuarterModulesRef(dcOrVars, vars));
-}
-
-export const getModuleByIdRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetModuleById', inputVars);
-}
-getModuleByIdRef.operationName = 'GetModuleById';
-
-export function getModuleById(dcOrVars, vars) {
-  return executeQuery(getModuleByIdRef(dcOrVars, vars));
-}
-
-export const getUserProgressRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetUserProgress');
-}
-getUserProgressRef.operationName = 'GetUserProgress';
-
-export function getUserProgress(dc) {
-  return executeQuery(getUserProgressRef(dc));
-}
-
-export const getUserQuizHistoryRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetUserQuizHistory');
-}
-getUserQuizHistoryRef.operationName = 'GetUserQuizHistory';
-
-export function getUserQuizHistory(dc) {
-  return executeQuery(getUserQuizHistoryRef(dc));
-}
-
-export const searchModulesRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'SearchModules', inputVars);
-}
-searchModulesRef.operationName = 'SearchModules';
-
-export function searchModules(dcOrVars, vars) {
-  return executeQuery(searchModulesRef(dcOrVars, vars));
-}
-
-export const listQuizzesRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListQuizzes');
-}
-listQuizzesRef.operationName = 'ListQuizzes';
-
-export function listQuizzes(dc) {
-  return executeQuery(listQuizzesRef(dc));
-}
-
-export const getQuizByIdRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetQuizById', inputVars);
-}
-getQuizByIdRef.operationName = 'GetQuizById';
-
-export function getQuizById(dcOrVars, vars) {
-  return executeQuery(getQuizByIdRef(dcOrVars, vars));
-}
-
 export const upsertUserRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
@@ -180,5 +92,93 @@ createQuestionRef.operationName = 'CreateQuestion';
 
 export function createQuestion(dcOrVars, vars) {
   return executeMutation(createQuestionRef(dcOrVars, vars));
+}
+
+export const listModulesRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'ListModules');
+}
+listModulesRef.operationName = 'ListModules';
+
+export function listModules(dc) {
+  return executeQuery(listModulesRef(dc));
+}
+
+export const getQuarterModulesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetQuarterModules', inputVars);
+}
+getQuarterModulesRef.operationName = 'GetQuarterModules';
+
+export function getQuarterModules(dcOrVars, vars) {
+  return executeQuery(getQuarterModulesRef(dcOrVars, vars));
+}
+
+export const getModuleByIdRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetModuleById', inputVars);
+}
+getModuleByIdRef.operationName = 'GetModuleById';
+
+export function getModuleById(dcOrVars, vars) {
+  return executeQuery(getModuleByIdRef(dcOrVars, vars));
+}
+
+export const getUserProgressRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetUserProgress');
+}
+getUserProgressRef.operationName = 'GetUserProgress';
+
+export function getUserProgress(dc) {
+  return executeQuery(getUserProgressRef(dc));
+}
+
+export const getUserQuizHistoryRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetUserQuizHistory');
+}
+getUserQuizHistoryRef.operationName = 'GetUserQuizHistory';
+
+export function getUserQuizHistory(dc) {
+  return executeQuery(getUserQuizHistoryRef(dc));
+}
+
+export const searchModulesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'SearchModules', inputVars);
+}
+searchModulesRef.operationName = 'SearchModules';
+
+export function searchModules(dcOrVars, vars) {
+  return executeQuery(searchModulesRef(dcOrVars, vars));
+}
+
+export const listQuizzesRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'ListQuizzes');
+}
+listQuizzesRef.operationName = 'ListQuizzes';
+
+export function listQuizzes(dc) {
+  return executeQuery(listQuizzesRef(dc));
+}
+
+export const getQuizByIdRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetQuizById', inputVars);
+}
+getQuizByIdRef.operationName = 'GetQuizById';
+
+export function getQuizById(dcOrVars, vars) {
+  return executeQuery(getQuizByIdRef(dcOrVars, vars));
 }
 

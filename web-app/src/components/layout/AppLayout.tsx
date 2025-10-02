@@ -3,6 +3,7 @@
 import React from 'react';
 import Navigation from './Navigation';
 import UserHeader from '@/components/auth/UserHeader';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 
@@ -56,7 +57,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
       {/* Main Content */}
       <main className="flex-1">
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </main>
 
       {/* Footer */}
