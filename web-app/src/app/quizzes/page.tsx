@@ -8,7 +8,16 @@ import { listQuizzes, ListQuizzesData } from '@/dataconnect-generated';
 
 // Type guard and validation functions
 function isValidQuizObject(quiz: unknown): quiz is NonNullable<ListQuizzesData['quizzes'][0]> {
-  if (!quiz || typeof quiz !== 'object') {
+  // Explicit null/undefined checks
+  if (quiz === null) {
+    console.warn('Quiz validation failed: quiz is null');
+    return false;
+  }
+  if (quiz === undefined) {
+    console.warn('Quiz validation failed: quiz is undefined');
+    return false;
+  }
+  if (typeof quiz !== 'object') {
     console.warn('Quiz validation failed: not an object', quiz);
     return false;
   }
@@ -96,16 +105,51 @@ const QuizzesPage = () => {
         
         // Ensure we have a valid response structure
         const rawQuizzes = result.data?.quizzes || [];
-        console.log('Raw quizzes received:', rawQuizzes);
+        console.log('Raw quizzes received:', {
+          count: rawQuizzes?.length || 0,
+          data: rawQuizzes,
+          hasNulls: rawQuizzes?.some(q => q === null),
+          hasUndefined: rawQuizzes?.some(q => q === undefined),
+          types: rawQuizzes?.map(q => typeof q)
+        });
+        
+        // First, filter out any null or undefined values from the array
+        const nonNullQuizzes = Array.isArray(rawQuizzes) 
+          ? rawQuizzes.filter((quiz, index) => {
+              if (quiz === null) {
+                console.warn(`Filtering out null quiz at index ${index}`);
+                return false;
+              }
+              if (quiz === undefined) {
+                console.warn(`Filtering out undefined quiz at index ${index}`);
+                return false;
+              }
+              return true;
+            })
+          : [];
+          
+        console.log('After null/undefined filtering:', {
+          original: rawQuizzes?.length || 0,
+          filtered: nonNullQuizzes.length,
+          removed: (rawQuizzes?.length || 0) - nonNullQuizzes.length
+        });
         
         // Use comprehensive validation function
-        const validQuizzes = sanitizeQuizArray(rawQuizzes);
+        const validQuizzes = sanitizeQuizArray(nonNullQuizzes);
         
-        if (validQuizzes.length !== result.data.quizzes.length) {
-          console.warn(`Filtered out ${result.data.quizzes.length - validQuizzes.length} invalid quiz objects`);
+        if (validQuizzes.length !== (result.data.quizzes?.length || 0)) {
+          console.warn(`Filtered out ${(result.data.quizzes?.length || 0) - validQuizzes.length} invalid quiz objects`);
         }
         
-        setQuizzes(validQuizzes);
+        console.log('Setting valid quizzes:', {
+          count: validQuizzes.length,
+          hasNulls: validQuizzes.some(q => q === null),
+          sample: validQuizzes[0]
+        });
+        
+        // Final safety check before setting state
+        const safeQuizzes = validQuizzes.filter(quiz => quiz !== null && quiz !== undefined);
+        setQuizzes(safeQuizzes);
       } catch (error) {
         console.error('Error loading quizzes:', error);
         setError(error instanceof Error ? error.message : 'Failed to load quizzes');
@@ -119,8 +163,17 @@ const QuizzesPage = () => {
   }, []);
 
   const filteredQuizzes = quizzes.filter(quiz => {
-    // Skip null or undefined quiz objects
-    if (!quiz || typeof quiz !== 'object' || !quiz.id || !quiz.title || typeof quiz.title !== 'string') {
+    // Explicit null/undefined checks first
+    if (quiz === null) {
+      console.warn('Filtering out null quiz object');
+      return false;
+    }
+    if (quiz === undefined) {
+      console.warn('Filtering out undefined quiz object');
+      return false;
+    }
+    // Skip invalid quiz objects
+    if (typeof quiz !== 'object' || !quiz.id || !quiz.title || typeof quiz.title !== 'string') {
       console.warn('Invalid quiz object detected:', quiz);
       return false;
     }
@@ -350,9 +403,18 @@ const QuizzesPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {Array.isArray(filteredQuizzes) ? filteredQuizzes.map((quiz, index) => {
             try {
+              // Explicit null/undefined checks
+              if (quiz === null) {
+                console.error(`Quiz at index ${index} is null during render`);
+                return null;
+              }
+              if (quiz === undefined) {
+                console.error(`Quiz at index ${index} is undefined during render`);
+                return null;
+              }
+              
               // Comprehensive validation before rendering
-              if (!quiz || 
-                  typeof quiz !== 'object' || 
+              if (typeof quiz !== 'object' || 
                   !quiz.id || 
                   !quiz.title || 
                   typeof quiz.title !== 'string' ||
@@ -363,7 +425,7 @@ const QuizzesPage = () => {
               }
             
             // Estimate time based on number of questions (2 minutes per question)
-            const estimatedTime = Math.max(5, quiz.questions.length * 2);
+            const estimatedTime = Math.max(5, (quiz?.questions?.length || 0) * 2);
             
             return (
               <div key={quiz.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
@@ -372,14 +434,14 @@ const QuizzesPage = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {quiz.title}
+                        {quiz?.title || 'Untitled Quiz'}
                       </h3>
                       <p className="text-sm text-gray-600 mb-2">
-                        Based on: {quiz.module?.title || 'Standalone Quiz'}
+                        Based on: {quiz?.module?.title || 'Standalone Quiz'}
                       </p>
                     </div>
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(quiz.module?.difficulty || 'intermediate')}`}>
-                      {quiz.module?.difficulty || 'intermediate'}
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(quiz?.module?.difficulty || 'intermediate')}`}>
+                      {quiz?.module?.difficulty || 'intermediate'}
                     </span>
                   </div>
 
@@ -387,7 +449,7 @@ const QuizzesPage = () => {
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="text-center p-3 bg-gray-50 rounded-md">
                       <p className="text-sm text-gray-600">Questions</p>
-                      <p className="text-lg font-semibold text-gray-900">{quiz.questions.length}</p>
+                      <p className="text-lg font-semibold text-gray-900">{quiz?.questions?.length || 0}</p>
                     </div>
                     <div className="text-center p-3 bg-gray-50 rounded-md">
                       <p className="text-sm text-gray-600">Est. Time</p>
@@ -405,7 +467,7 @@ const QuizzesPage = () => {
                   {/* Topics */}
                   <div className="mb-4">
                     <div className="flex flex-wrap gap-1">
-                      {quiz.module?.theologyTags?.map((topic) => (
+                      {quiz?.module?.theologyTags?.map((topic) => (
                         <span key={topic} className="inline-flex items-center px-2 py-1 rounded text-xs bg-blue-100 text-blue-800">
                           {topic}
                         </span>
@@ -425,7 +487,7 @@ const QuizzesPage = () => {
                       </span>
                     </div>
                     <button 
-                      onClick={() => router.push(`/quizzes/${quiz.id}`)}
+                      onClick={() => router.push(`/quizzes/${quiz?.id || 'unknown'}`)}
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                     >
                       Start Quiz
