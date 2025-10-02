@@ -254,9 +254,6 @@ const QuizzesPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="bg-red-500 text-white p-8 mb-8 text-3xl font-bold animate-pulse">
-            🚀🚨 CACHE BUSTER TEST - {new Date().toISOString()} - LATEST DEPLOY 🚨🚀
-          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             ❓ Interactive Quizzes
           </h1>
@@ -407,14 +404,85 @@ const QuizzesPage = () => {
           </div>
         </div>
 
-        {/* Quizzes Grid - EMERGENCY SAFE MODE */}
+        {/* Quizzes Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <div className="col-span-full bg-purple-500 text-white p-8 text-center">
-            <h1 className="text-4xl font-bold mb-4">🚀 DEPLOYMENT WORKING! 🚀</h1>
-            <p className="text-2xl mb-4">Cache Buster: {Date.now()}</p>
-            <p className="text-xl">If you can see this, the deployment is working and the null error should be gone!</p>
-            <p className="text-lg mt-4">Original quiz loading has been disabled to prevent any errors.</p>
-          </div>
+          {filteredQuizzes.map((quiz, index) => {
+            // Extra safety check for each quiz render
+            if (!quiz || typeof quiz !== 'object' || !quiz.id || !quiz.title) {
+              console.warn(`Skipping invalid quiz at index ${index}:`, quiz);
+              return null;
+            }
+
+            return (
+              <div 
+                key={quiz.id} 
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => router.push(`/quizzes/${quiz.id}`)}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      {quiz.title}
+                    </h3>
+                    {quiz.module?.title && (
+                      <p className="text-sm text-gray-600 mb-2">
+                        Module: {quiz.module.title}
+                      </p>
+                    )}
+                    {quiz.module?.difficulty && (
+                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${
+                        getDifficultyColor(quiz.module.difficulty)
+                      }`}>
+                        {quiz.module.difficulty.charAt(0).toUpperCase() + quiz.module.difficulty.slice(1)}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-col items-end ml-4">
+                    <div className="text-2xl mb-2">🏆</div>
+                    <div className="text-right text-sm">
+                      <div className="text-gray-600">
+                        {Array.isArray(quiz.questions) ? quiz.questions.length : 0} questions
+                      </div>
+                      <div className="text-purple-600 font-medium">
+                        Best: 95%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <div className="flex space-x-2">
+                    {quiz.module?.theologyTags && Array.isArray(quiz.module.theologyTags) && 
+                      quiz.module.theologyTags.slice(0, 2).map((tag, tagIndex) => (
+                        typeof tag === 'string' ? (
+                          <span 
+                            key={tagIndex}
+                            className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+                          >
+                            {tag}
+                          </span>
+                        ) : null
+                      ))
+                    }
+                    {quiz.module?.theologyTags && Array.isArray(quiz.module.theologyTags) && 
+                      quiz.module.theologyTags.length > 2 && (
+                      <span className="text-xs text-gray-500">
+                        +{quiz.module.theologyTags.length - 2} more
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center text-sm text-purple-600 font-medium">
+                    Start Quiz 
+                    <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Empty State */}
