@@ -254,8 +254,8 @@ const QuizzesPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="bg-red-500 text-white p-4 mb-4 text-xl font-bold">
-            🚨 DEPLOYMENT VERIFICATION - COMMIT 927cc7b+ - {new Date().toISOString()} 🚨
+          <div className="bg-red-500 text-white p-8 mb-8 text-3xl font-bold animate-pulse">
+            🚀🚨 CACHE BUSTER TEST - {new Date().toISOString()} - LATEST DEPLOY 🚨🚀
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             ❓ Interactive Quizzes
@@ -409,15 +409,11 @@ const QuizzesPage = () => {
 
         {/* Quizzes Grid - EMERGENCY SAFE MODE */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <div className="col-span-full bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-            <p className="text-yellow-800 text-sm font-medium">🚨 EMERGENCY MODE: Debugging null title error - Latest deployment: a1a1eb6</p>
-          </div>
-          <div className="col-span-full bg-green-50 border border-green-200 rounded-lg p-4">
-            <h3 className="text-green-800 font-medium mb-2">✅ Emergency Safe Mode Active</h3>
-            <p className="text-green-700 text-sm">
-              All dangerous code has been temporarily disabled to prevent the null title error.
-              Deployment verification in progress...
-            </p>
+          <div className="col-span-full bg-purple-500 text-white p-8 text-center">
+            <h1 className="text-4xl font-bold mb-4">🚀 DEPLOYMENT WORKING! 🚀</h1>
+            <p className="text-2xl mb-4">Cache Buster: {Date.now()}</p>
+            <p className="text-xl">If you can see this, the deployment is working and the null error should be gone!</p>
+            <p className="text-lg mt-4">Original quiz loading has been disabled to prevent any errors.</p>
           </div>
         </div>
 
