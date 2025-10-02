@@ -25,7 +25,7 @@ export default function Home() {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Explore Scripture through interactive quizzes, Sabbath School Quarterly lessons, 
-            and theological studies designed to strengthen your faith and deepen your understanding of God's Word.
+            and theological studies designed to strengthen your faith and deepen your understanding of God&apos;s Word.
           </p>
         </div>
 
