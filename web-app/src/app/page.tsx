@@ -14,6 +14,9 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="text-center mb-12">
+          <div className="bg-red-500 text-white p-4 mb-4 text-2xl font-bold">
+            🚨 DEPLOYMENT TEST - Commit 927cc7b+ - {new Date().toISOString()} 🚨
+          </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Welcome to Your SDA Bible Study Companion
           </h1>
