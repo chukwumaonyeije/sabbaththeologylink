@@ -406,19 +406,30 @@ const QuizzesPage = () => {
 
         {/* Quizzes Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {Array.isArray(filteredQuizzes) ? filteredQuizzes
-            .filter((quiz) => {
-              // EMERGENCY: Final null filtering right before render
-              if (quiz === null || quiz === undefined) {
-                console.error('EMERGENCY FILTER: Found null/undefined quiz in filteredQuizzes');
-                return false;
-              }
-              if (!quiz || typeof quiz !== 'object') {
-                console.error('EMERGENCY FILTER: Invalid quiz object:', quiz);
-                return false;
-              }
-              return true;
-            })
+          {(() => {
+            console.log('🛑 EMERGENCY RENDER CHECK - filteredQuizzes:', filteredQuizzes);
+            
+            // EMERGENCY: Create completely safe array
+            const emergencySafeQuizzes = (filteredQuizzes || [])
+              .filter((quiz) => {
+                if (quiz === null || quiz === undefined || !quiz) {
+                  console.error('🚨 EMERGENCY FILTER: Found null/undefined quiz:', quiz);
+                  return false;
+                }
+                if (typeof quiz !== 'object') {
+                  console.error('🚨 EMERGENCY FILTER: Invalid quiz type:', typeof quiz, quiz);
+                  return false;
+                }
+                if (!quiz.title || !quiz.id) {
+                  console.error('🚨 EMERGENCY FILTER: Missing title/id:', quiz);
+                  return false;
+                }
+                return true;
+              });
+            
+            console.log('🔒 EMERGENCY SAFE QUIZZES:', emergencySafeQuizzes);
+            
+            return Array.isArray(emergencySafeQuizzes) ? emergencySafeQuizzes
             .map((quiz, index) => {
             // EMERGENCY LOGGING: Log every quiz before processing
             console.log(`Processing quiz ${index}:`, {
@@ -561,7 +572,8 @@ const QuizzesPage = () => {
               <h3 className="text-lg font-medium text-gray-900 mb-2">Data loading error</h3>
               <p className="text-gray-600">Unable to load quiz data. Please try refreshing the page.</p>
             </div>
-          )}
+          );
+          })()}
         </div>
 
         {/* Empty State */}

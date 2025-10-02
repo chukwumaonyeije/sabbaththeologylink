@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 
 export default function Home() {
+  console.log('🏠 HOME PAGE LOADED - Latest commit - ' + new Date().toISOString());
   const { currentUser } = useAuth();
 
   return (
