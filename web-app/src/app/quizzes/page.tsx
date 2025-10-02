@@ -404,176 +404,18 @@ const QuizzesPage = () => {
           </div>
         </div>
 
-        {/* Quizzes Grid */}
+        {/* Quizzes Grid - EMERGENCY SAFE MODE */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {(() => {
-            console.log('🛑 EMERGENCY RENDER CHECK - filteredQuizzes:', filteredQuizzes);
-            
-            // EMERGENCY: Create completely safe array
-            const emergencySafeQuizzes = (filteredQuizzes || [])
-              .filter((quiz) => {
-                if (quiz === null || quiz === undefined || !quiz) {
-                  console.error('🚨 EMERGENCY FILTER: Found null/undefined quiz:', quiz);
-                  return false;
-                }
-                if (typeof quiz !== 'object') {
-                  console.error('🚨 EMERGENCY FILTER: Invalid quiz type:', typeof quiz, quiz);
-                  return false;
-                }
-                if (!quiz.title || !quiz.id) {
-                  console.error('🚨 EMERGENCY FILTER: Missing title/id:', quiz);
-                  return false;
-                }
-                return true;
-              });
-            
-            console.log('🔒 EMERGENCY SAFE QUIZZES:', emergencySafeQuizzes);
-            
-            return Array.isArray(emergencySafeQuizzes) ? emergencySafeQuizzes
-            .map((quiz, index) => {
-            // EMERGENCY LOGGING: Log every quiz before processing
-            console.log(`Processing quiz ${index}:`, {
-              quiz,
-              isNull: quiz === null,
-              isUndefined: quiz === undefined,
-              type: typeof quiz,
-              hasTitle: quiz?.title,
-              hasId: quiz?.id
-            });
-            
-            try {
-              // TRIPLE CHECK: Emergency null/undefined validation
-              if (quiz === null) {
-                console.error(`RENDER ERROR: Quiz at index ${index} is null during render`);
-                return (
-                  <div key={`null-${index}`} className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-red-600 text-sm">Error: Null quiz data detected</p>
-                  </div>
-                );
-              }
-              if (quiz === undefined) {
-                console.error(`RENDER ERROR: Quiz at index ${index} is undefined during render`);
-                return (
-                  <div key={`undefined-${index}`} className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-red-600 text-sm">Error: Undefined quiz data detected</p>
-                  </div>
-                );
-              }
-              
-              // Comprehensive validation before rendering
-              if (typeof quiz !== 'object' || 
-                  !quiz.id || 
-                  !quiz.title || 
-                  typeof quiz.title !== 'string' ||
-                  !Array.isArray(quiz.questions) ||
-                  quiz.questions.length === 0) {
-                console.warn('Skipping invalid quiz in render:', quiz);
-                return null;
-              }
-            
-            // EMERGENCY: Safe object destructuring with defaults
-            const safeQuiz = {
-              ...(quiz || {}),
-              id: quiz?.id || `error-${index}`,
-              title: quiz?.title || 'Untitled Quiz',
-              questions: quiz?.questions || [],
-              module: quiz?.module || null
-            };
-            
-            // EMERGENCY: Log the safe quiz object
-            console.log(`Safe quiz ${index}:`, safeQuiz);
-            
-            // Estimate time based on number of questions (2 minutes per question)
-            const estimatedTime = Math.max(5, (safeQuiz.questions?.length || 0) * 2);
-            
-            return (
-              <div key={safeQuiz.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                <div className="p-4 sm:p-6">
-                  {/* Quiz Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {safeQuiz.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-2">
-                        Based on: {safeQuiz.module?.title || 'Standalone Quiz'}
-                      </p>
-                    </div>
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(safeQuiz.module?.difficulty || 'intermediate')}`}>
-                      {safeQuiz.module?.difficulty || 'intermediate'}
-                    </span>
-                  </div>
-
-                  {/* Quiz Stats */}
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="text-center p-3 bg-gray-50 rounded-md">
-                      <p className="text-sm text-gray-600">Questions</p>
-                      <p className="text-lg font-semibold text-gray-900">{safeQuiz.questions?.length || 0}</p>
-                    </div>
-                    <div className="text-center p-3 bg-gray-50 rounded-md">
-                      <p className="text-sm text-gray-600">Est. Time</p>
-                      <p className="text-lg font-semibold text-gray-900">{estimatedTime} min</p>
-                    </div>
-                  </div>
-
-                  {/* Ready to start message */}
-                  <div className="mb-4 p-3 bg-blue-50 rounded-md border border-blue-200">
-                    <p className="text-sm font-medium text-blue-800 text-center">
-                      Ready to test your knowledge!
-                    </p>
-                  </div>
-
-                  {/* Topics */}
-                  <div className="mb-4">
-                    <div className="flex flex-wrap gap-1">
-                      {safeQuiz.module?.theologyTags?.map((topic) => (
-                        <span key={topic} className="inline-flex items-center px-2 py-1 rounded text-xs bg-blue-100 text-blue-800">
-                          {topic}
-                        </span>
-                      )) || (
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-100 text-gray-600">
-                          General Knowledge
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Action Button */}
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-500">
-                      <span className="flex items-center">
-                        🕒 ~{estimatedTime} minutes
-                      </span>
-                    </div>
-                    <button 
-                      onClick={() => router.push(`/quizzes/${safeQuiz.id}`)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-                    >
-                      Start Quiz
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-            } catch (error) {
-              console.error('Error rendering quiz at index', index, ':', error);
-              return (
-                <div key={`error-${index}`} className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <div className="text-center text-red-600">
-                    <p className="text-sm font-medium">Error loading quiz</p>
-                    <p className="text-xs">Please try refreshing the page</p>
-                  </div>
-                </div>
-              );
-            }
-          }) : (
-            <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">⚠️</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Data loading error</h3>
-              <p className="text-gray-600">Unable to load quiz data. Please try refreshing the page.</p>
-            </div>
-          );
-          })()}
+          <div className="col-span-full bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+            <p className="text-yellow-800 text-sm font-medium">🚨 EMERGENCY MODE: Debugging null title error - Latest deployment: a1a1eb6</p>
+          </div>
+          <div className="col-span-full bg-green-50 border border-green-200 rounded-lg p-4">
+            <h3 className="text-green-800 font-medium mb-2">✅ Emergency Safe Mode Active</h3>
+            <p className="text-green-700 text-sm">
+              All dangerous code has been temporarily disabled to prevent the null title error.
+              Deployment verification in progress...
+            </p>
+          </div>
         </div>
 
         {/* Empty State */}

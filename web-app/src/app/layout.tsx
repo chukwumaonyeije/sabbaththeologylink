@@ -23,9 +23,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // DEPLOYMENT VERIFICATION
+  // DEPLOYMENT VERIFICATION - FORCE UPDATE
   if (typeof window !== 'undefined') {
-    console.log('🚀 ROOT LAYOUT CLIENT - Commit f626986 - ' + new Date().toISOString());
+    console.log('🚀🚀🚀 ROOT LAYOUT CLIENT - Commit a1a1eb6 FORCE UPDATE - ' + new Date().toISOString());
   }
   
   return (
