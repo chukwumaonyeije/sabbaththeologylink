@@ -492,6 +492,31 @@
         margin-bottom: 1rem;
       }
       
+      /* Admin Panel Styles */
+      .admin-section {
+        padding: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: #fefefe;
+      }
+      
+      .admin-section h4 {
+        margin: 0 0 0.5rem 0;
+        color: var(--primary-color);
+        font-size: 1.1rem;
+      }
+      
+      .admin-section p {
+        margin: 0 0 1rem 0;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+      
+      .admin-section .btn {
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
       @media (max-width: 768px) {
         .content {
           padding: 1rem;
@@ -805,9 +830,53 @@
           <div class="card">
             <h3>Content Management</h3>
             <p>Upload and manage Sabbath School Quarterly content.</p>
-            <div class="empty-state">
+            
+            <!-- Admin Access Required (shown when not signed in as admin) -->
+            <div id="admin-access-required" class="empty-state">
               <h3>Admin access required</h3>
               <p>Sign in with admin privileges to upload and manage content.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: #f0f8ff; border-radius: 6px; text-align: left;">
+                <h4>How to get admin access:</h4>
+                <ol style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                  <li>Go to "My Progress" tab and sign in with your account</li>
+                  <li>Contact the site administrator to grant admin privileges</li>
+                  <li>Or click the button below to make yourself admin (development only)</li>
+                </ol>
+                <button id="make-admin-btn" class="btn" style="margin-top: 0.5rem;" onclick="makeCurrentUserAdmin()" disabled>
+                  Make Me Admin (Development)
+                </button>
+              </div>
+            </div>
+            
+            <!-- Admin Panel (shown when signed in as admin) -->
+            <div id="admin-panel" style="display: none;">
+              <div class="admin-section">
+                <h4>📁 Content Upload</h4>
+                <p>Upload Sabbath School Quarterly lessons and materials.</p>
+                <button class="btn">Upload Lesson Files</button>
+                <button class="btn btn-secondary">Manage Existing Content</button>
+              </div>
+              
+              <div class="admin-section" style="margin-top: 2rem;">
+                <h4>👥 User Management</h4>
+                <p>View and manage user accounts and progress.</p>
+                <button class="btn">View All Users</button>
+                <button class="btn btn-secondary">Export User Data</button>
+              </div>
+              
+              <div class="admin-section" style="margin-top: 2rem;">
+                <h4>📊 Analytics & Reports</h4>
+                <p>View site usage statistics and quiz performance.</p>
+                <button class="btn">View Analytics Dashboard</button>
+                <button class="btn btn-secondary">Generate Reports</button>
+              </div>
+              
+              <div class="admin-section" style="margin-top: 2rem;">
+                <h4>⚙️ Site Settings</h4>
+                <p>Configure site settings and features.</p>
+                <button class="btn">Site Configuration</button>
+                <button class="btn btn-secondary">Feature Toggles</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1003,6 +1072,17 @@
         document.getElementById('password').value = '';
       }
       
+      // Admin users list - in production, this should be in Firestore
+      const adminEmails = [
+        'conyeije@atlantaperinatal.com',
+        'onyeije@gmail.com'
+      ];
+      
+      function isUserAdmin(user) {
+        if (!user) return false;
+        return adminEmails.includes(user.email.toLowerCase());
+      }
+      
       function updateUIForUser(user) {
         const authSection = document.getElementById('auth-section');
         const userProgress = document.getElementById('user-progress');
@@ -1011,18 +1091,82 @@
           // User is signed in
           authSection.style.display = 'none';
           userProgress.style.display = 'block';
+          
+          const isAdmin = isUserAdmin(user);
+          const adminBadge = isAdmin ? ' <span style="background: #059669; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">ADMIN</span>' : '';
+          
           userProgress.innerHTML = `
-            <h4>Welcome, ${user.email}</h4>
+            <h4>Welcome, ${user.email}${adminBadge}</h4>
             <button class="btn btn-secondary" onclick="signOut()">Sign Out</button>
             <div class="empty-state">
               <p>Complete modules and quizzes to see your progress here.</p>
             </div>
           `;
+          
+          // Update admin panel visibility
+          updateAdminPanel(user);
+          
+          // Enable admin button if user is signed in
+          const makeAdminBtn = document.getElementById('make-admin-btn');
+          if (makeAdminBtn) {
+            makeAdminBtn.disabled = false;
+            makeAdminBtn.textContent = isAdmin ? 'Already Admin ✓' : 'Make Me Admin (Development)';
+          }
+          
         } else {
           // User is signed out
           authSection.style.display = 'block';
           userProgress.style.display = 'none';
+          updateAdminPanel(null);
+          
+          // Disable admin button
+          const makeAdminBtn = document.getElementById('make-admin-btn');
+          if (makeAdminBtn) {
+            makeAdminBtn.disabled = true;
+            makeAdminBtn.textContent = 'Make Me Admin (Development)';
+          }
         }
+      }
+      
+      function updateAdminPanel(user) {
+        const adminAccessRequired = document.getElementById('admin-access-required');
+        const adminPanel = document.getElementById('admin-panel');
+        
+        const isAdmin = isUserAdmin(user);
+        
+        if (isAdmin) {
+          adminAccessRequired.style.display = 'none';
+          adminPanel.style.display = 'block';
+        } else {
+          adminAccessRequired.style.display = 'block';
+          adminPanel.style.display = 'none';
+        }
+      }
+      
+      function makeCurrentUserAdmin() {
+        if (!currentUser) {
+          alert('Please sign in first!');
+          switchTab('progress');
+          return;
+        }
+        
+        const userEmail = currentUser.email.toLowerCase();
+        
+        if (adminEmails.includes(userEmail)) {
+          alert('You are already an admin!');
+          return;
+        }
+        
+        // Add user to admin list (in production, this would update Firestore)
+        adminEmails.push(userEmail);
+        
+        // Update UI
+        updateUIForUser(currentUser);
+        
+        alert(`✅ Admin privileges granted to ${currentUser.email}!\n\nYou now have access to the admin panel.`);
+        
+        // Optional: Save to Firestore in production
+        // saveAdminStatus(currentUser.uid, true);
       }
       
       // Quiz filtering and pagination functionality
