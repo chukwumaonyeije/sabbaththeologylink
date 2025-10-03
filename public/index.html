@@ -675,6 +675,213 @@
         color: var(--text-secondary);
       }
       
+      /* Landing Page Styles */
+      .landing-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+      
+      .landing-container {
+        max-width: 1200px;
+        width: 100%;
+        text-align: center;
+      }
+      
+      .hero-section {
+        margin-bottom: 3rem;
+      }
+      
+      .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+      
+      .cta-section {
+        margin-bottom: 4rem;
+      }
+      
+      .cta-card {
+        background: white;
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      
+      .cta-card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+      }
+      
+      .cta-card p {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+      
+      .cta-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      }
+      
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+      }
+      
+      .features-section {
+        margin-top: 2rem;
+      }
+      
+      .features-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      .feature-column {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 2rem 1.5rem;
+        text-align: left;
+      }
+      
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      
+      .feature-column h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 1rem;
+      }
+      
+      .feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .feature-list li {
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+      }
+      
+      .feature-list li:before {
+        content: '•';
+        color: rgba(255, 255, 255, 0.7);
+        margin-right: 0.75rem;
+      }
+      
+      /* Auth Modal Styles */
+      .auth-modal-content {
+        max-width: 450px;
+      }
+      
+      .auth-form-container {
+        padding: 0;
+      }
+      
+      .auth-modal-footer {
+        gap: 1rem;
+      }
+      
+      .auth-switch {
+        text-align: center;
+        padding: 1rem 1.5rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+        background: #f8fafc;
+        border-radius: 0 0 8px 8px;
+      }
+      
+      .auth-switch p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+      }
+      
+      .auth-link {
+        color: var(--primary-color);
+        cursor: pointer;
+        font-weight: 500;
+      }
+      
+      .auth-link:hover {
+        text-decoration: underline;
+      }
+      
+      /* Mobile Responsive for Landing Page */
+      @media (max-width: 768px) {
+        .landing-page {
+          padding: 1rem;
+        }
+        
+        .hero-title {
+          font-size: 2rem;
+        }
+        
+        .hero-subtitle {
+          font-size: 1.1rem;
+        }
+        
+        .cta-card {
+          padding: 2rem 1.5rem;
+        }
+        
+        .cta-card h2 {
+          font-size: 1.5rem;
+        }
+        
+        .features-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+        
+        .feature-column {
+          padding: 1.5rem 1rem;
+        }
+        
+        .feature-column h3 {
+          font-size: 1.25rem;
+        }
+      }
+      
       @media (max-width: 768px) {
         .content {
           padding: 1rem;
@@ -783,7 +990,62 @@
     </style>
   </head>
   <body>
-    <div class="app">
+    <!-- Landing Page (shown to non-authenticated users) -->
+    <div id="landing-page" class="landing-page">
+      <div class="landing-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <h1 class="hero-title">Welcome to Your SDA Bible Study Companion</h1>
+          <p class="hero-subtitle">
+            Deepen your understanding of Scripture through Sabbath School Quarterly lessons,
+            theological insights, and interactive Bible studies from a Seventh-day Adventist
+            perspective.
+          </p>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="cta-section">
+          <div class="cta-card">
+            <h2>Join Our SDA Community</h2>
+            <p>
+              Create your free account to access personalized Bible study resources, track your
+              progress, and engage with Sabbath School content.
+            </p>
+            <button class="cta-button" onclick="showAuthModal()">Get Started</button>
+          </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features-section">
+          <div class="features-grid">
+            <div class="feature-column">
+              <div class="feature-icon">📚</div>
+              <h3>Study Features</h3>
+              <ul class="feature-list">
+                <li>Weekly Sabbath School lessons</li>
+                <li>Interactive quizzes and assessments</li>
+                <li>Progress tracking</li>
+                <li>Memory verse practice</li>
+              </ul>
+            </div>
+            
+            <div class="feature-column">
+              <div class="feature-icon">⛪</div>
+              <h3>SDA Perspective</h3>
+              <ul class="feature-list">
+                <li>Theological commentary</li>
+                <li>Bible version preferences</li>
+                <li>Doctrinal insights</li>
+                <li>Community-focused learning</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    
+    <!-- Main App (shown to authenticated users) -->
+    <div id="main-app" class="app" style="display: none;">
       <!-- Header -->
       <header class="header">
         <h1>SabbathTheologyLink</h1>
@@ -1042,6 +1304,43 @@
       </main>
     </div>
     
+    <!-- Authentication Modal -->
+    <div id="auth-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content auth-modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h2 id="auth-modal-title">Sign In to Continue</h2>
+          <button class="modal-close" onclick="closeAuthModal()">×</button>
+        </div>
+        
+        <!-- Content -->
+        <div class="modal-body">
+          <div class="auth-form-container">
+            <div id="auth-error" class="error-message" style="display: none;"></div>
+            
+            <div class="form-group">
+              <label class="form-label" for="modal-email">Email</label>
+              <input type="email" id="modal-email" class="form-input" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="modal-password">Password</label>
+              <input type="password" id="modal-password" class="form-input" placeholder="Enter your password">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="modal-footer auth-modal-footer">
+          <button id="modal-signin-btn" class="btn" onclick="handleModalAuth('signin')">Sign In</button>
+          <button id="modal-signup-btn" class="btn btn-secondary" onclick="handleModalAuth('signup')">Sign Up</button>
+        </div>
+        
+        <div class="auth-switch">
+          <p id="auth-switch-text">Don't have an account? <span class="auth-link" onclick="switchAuthMode()">Sign up here</span></p>
+        </div>
+      </div>
+    </div>
+    
     <!-- Bulk Upload Modal -->
     <div id="bulk-upload-modal" class="modal-overlay" style="display: none;">
       <div class="modal-content">
@@ -1167,8 +1466,17 @@
             // Set up auth state listener
             auth.onAuthStateChanged(user => {
               currentUser = user;
-              updateUIForUser(user);
-              debugEl.innerHTML += `<br>Auth: ${user ? 'Signed in as ' + user.email : 'Not signed in'}`;
+              
+              if (user) {
+                // User is signed in - show main app
+                showMainApp();
+                updateUIForUser(user);
+                debugEl.innerHTML += `<br>Auth: Signed in as ${user.email}`;
+              } else {
+                // User is not signed in - show landing page
+                showLandingPage();
+                debugEl.innerHTML += '<br>Auth: Not signed in';
+              }
             });
             
             loadingEl.style.display = 'none';
@@ -1291,6 +1599,7 @@
       function signOut() {
         auth.signOut().then(() => {
           console.log('User signed out');
+          // The auth state listener will automatically show landing page
         });
       }
       
@@ -1394,6 +1703,122 @@
         
         // Optional: Save to Firestore in production
         // saveAdminStatus(currentUser.uid, true);
+      }
+      
+      // Landing Page Functions
+      function showLandingPage() {
+        document.getElementById('landing-page').style.display = 'flex';
+        document.getElementById('main-app').style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
+      }
+      
+      function showMainApp() {
+        document.getElementById('landing-page').style.display = 'none';
+        document.getElementById('main-app').style.display = 'flex';
+      }
+      
+      // Auth Modal Functions
+      let isSignUpMode = false;
+      
+      function showAuthModal() {
+        document.getElementById('auth-modal').style.display = 'flex';
+        clearAuthModalForm();
+        setAuthMode('signin');
+      }
+      
+      function closeAuthModal() {
+        document.getElementById('auth-modal').style.display = 'none';
+        clearAuthModalForm();
+        hideAuthError();
+      }
+      
+      function setAuthMode(mode) {
+        isSignUpMode = mode === 'signup';
+        const title = document.getElementById('auth-modal-title');
+        const switchText = document.getElementById('auth-switch-text');
+        const signinBtn = document.getElementById('modal-signin-btn');
+        const signupBtn = document.getElementById('modal-signup-btn');
+        
+        if (isSignUpMode) {
+          title.textContent = 'Create Your Account';
+          switchText.innerHTML = 'Already have an account? <span class="auth-link" onclick="switchAuthMode()">Sign in here</span>';
+          signinBtn.style.display = 'none';
+          signupBtn.style.display = 'inline-block';
+          signupBtn.textContent = 'Create Account';
+        } else {
+          title.textContent = 'Sign In to Continue';
+          switchText.innerHTML = 'Don\'t have an account? <span class="auth-link" onclick="switchAuthMode()">Sign up here</span>';
+          signinBtn.style.display = 'inline-block';
+          signupBtn.style.display = 'none';
+        }
+      }
+      
+      function switchAuthMode() {
+        setAuthMode(isSignUpMode ? 'signin' : 'signup');
+        hideAuthError();
+      }
+      
+      function clearAuthModalForm() {
+        document.getElementById('modal-email').value = '';
+        document.getElementById('modal-password').value = '';
+      }
+      
+      function showAuthError(message) {
+        const errorEl = document.getElementById('auth-error');
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      }
+      
+      function hideAuthError() {
+        document.getElementById('auth-error').style.display = 'none';
+      }
+      
+      function handleModalAuth(action) {
+        const email = document.getElementById('modal-email').value;
+        const password = document.getElementById('modal-password').value;
+        
+        if (!email || !password) {
+          showAuthError('Please enter both email and password');
+          return;
+        }
+        
+        if (action === 'signup' && password.length < 6) {
+          showAuthError('Password must be at least 6 characters');
+          return;
+        }
+        
+        hideAuthError();
+        
+        if (action === 'signin') {
+          auth.signInWithEmailAndPassword(email, password)
+            .then(userCredential => {
+              console.log('User signed in:', userCredential.user.email);
+              closeAuthModal();
+            })
+            .catch(error => {
+              console.error('Sign in error:', error);
+              showAuthError('Sign in failed: ' + error.message);
+            });
+        } else {
+          auth.createUserWithEmailAndPassword(email, password)
+            .then(userCredential => {
+              console.log('User created:', userCredential.user.email);
+              // Create user document in Firestore
+              return firestore.collection('users').doc(userCredential.user.uid).set({
+                email: userCredential.user.email,
+                name: userCredential.user.email.split('@')[0],
+                progress: [],
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+            })
+            .then(() => {
+              closeAuthModal();
+            })
+            .catch(error => {
+              console.error('Sign up error:', error);
+              showAuthError('Sign up failed: ' + error.message);
+            });
+        }
       }
       
       // Bulk Upload Functions
