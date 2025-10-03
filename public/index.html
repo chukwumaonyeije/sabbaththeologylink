@@ -16,6 +16,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="SabbathTheologyLink">
     
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DFBSX9SZHV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DFBSX9SZHV');
+    </script>
+    
     <!-- Firebase SDKs -->
     <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
     <script defer src="/__/firebase/12.3.0/firebase-auth-compat.js"></script>
@@ -236,6 +245,238 @@
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
       }
       
+      /* Quiz Page Styles */
+      .quiz-header {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+      }
+      
+      .quiz-header h2 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+      
+      .quiz-header p {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+      }
+      
+      .filter-controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      
+      .filter-select {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        background: white;
+        font-size: 0.875rem;
+        min-width: 150px;
+      }
+      
+      .filter-select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+      
+      .quiz-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+      }
+      
+      .quiz-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 180px;
+        position: relative;
+      }
+      
+      .quiz-card:hover {
+        box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+      
+      .quiz-header-info {
+        flex: 1;
+      }
+      
+      .quiz-card h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+        line-height: 1.4;
+      }
+      
+      .quiz-stats {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+      
+      .question-count,
+      .best-score {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        background: #f8fafc;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+      }
+      
+      .quiz-start-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        font-size: 0.875rem;
+        align-self: flex-start;
+      }
+      
+      .quiz-start-btn:hover {
+        background: var(--primary-dark);
+      }
+      
+      .quiz-start-btn.completed {
+        background: var(--success-color);
+      }
+      
+      .quiz-start-btn.completed:hover {
+        background: #047857;
+      }
+      
+      .quiz-start-btn.in-progress {
+        background: #f59e0b;
+      }
+      
+      .quiz-start-btn.in-progress:hover {
+        background: #d97706;
+      }
+      
+      /* Quiz Card Icons */
+      .quiz-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        opacity: 0.7;
+      }
+      
+      /* Progress Indicators */
+      .progress-indicator {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        font-weight: bold;
+      }
+      
+      .progress-indicator.completed {
+        background: var(--success-color);
+        color: white;
+      }
+      
+      .progress-indicator.in-progress {
+        background: #f59e0b;
+        color: white;
+      }
+      
+      .progress-indicator.not-started {
+        background: var(--border-color);
+        color: var(--text-secondary);
+      }
+      
+      /* Progress Bar */
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: var(--border-color);
+        border-radius: 2px;
+        margin-top: 0.5rem;
+        overflow: hidden;
+      }
+      
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+        transition: width 0.3s ease;
+      }
+      
+      /* Difficulty Badges */
+      .difficulty-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .difficulty-badge.beginner {
+        background: #dcfce7;
+        color: #166534;
+      }
+      
+      .difficulty-badge.intermediate {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      
+      .difficulty-badge.advanced {
+        background: #fecaca;
+        color: #991b1b;
+      }
+      
+      /* Pagination Styles */
+      .pagination-info {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+      
+      .pagination-controls {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-color);
+      }
+      
+      .pagination-stats {
+        margin-top: 1rem;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+      
+      #load-more-btn {
+        margin-bottom: 1rem;
+      }
+      
       @media (max-width: 768px) {
         .content {
           padding: 1rem;
@@ -248,6 +489,97 @@
         
         .card {
           padding: 1rem;
+        }
+        
+        .quiz-header {
+          padding: 1rem;
+          margin-bottom: 1rem;
+        }
+        
+        .quiz-header h2 {
+          font-size: 1.5rem;
+        }
+        
+        .quiz-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+        
+        .quiz-card {
+          padding: 1rem;
+          min-height: auto;
+          padding-top: 3rem;
+        }
+        
+        .quiz-icon {
+          top: 0.75rem;
+          right: 0.75rem;
+          font-size: 1.25rem;
+        }
+        
+        .progress-indicator {
+          top: 0.75rem;
+          left: 0.75rem;
+          width: 20px;
+          height: 20px;
+          font-size: 0.75rem;
+        }
+        
+        .quiz-card h3 {
+          font-size: 1rem;
+          margin-bottom: 0.75rem;
+        }
+        
+        .quiz-stats {
+          margin-bottom: 1rem;
+        }
+        
+        .filter-controls {
+          gap: 0.5rem;
+        }
+        
+        .filter-select {
+          min-width: 120px;
+          flex: 1;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .quiz-header {
+          padding: 0.75rem;
+        }
+        
+        .quiz-card {
+          padding: 0.75rem;
+          padding-top: 2.5rem;
+        }
+        
+        .quiz-icon {
+          top: 0.5rem;
+          right: 0.5rem;
+          font-size: 1rem;
+        }
+        
+        .progress-indicator {
+          top: 0.5rem;
+          left: 0.5rem;
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+        }
+        
+        .quiz-stats {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: flex-start;
+        }
+        
+        .filter-controls {
+          flex-direction: column;
+        }
+        
+        .filter-select {
+          min-width: 100%;
         }
       }
     </style>
@@ -284,12 +616,143 @@
         
         <!-- Quizzes Tab -->
         <div id="quizzes" class="tab-panel">
-          <div class="card">
-            <h3>Bible Study Quizzes</h3>
+          <div class="quiz-header">
+            <h2>Bible Study Quizzes</h2>
             <p>Test your understanding with interactive quizzes based on Sabbath School lessons.</p>
-            <div class="empty-state">
-              <h3>No quizzes available yet</h3>
-              <p>Quizzes will be automatically generated from uploaded content.</p>
+            
+            <!-- Filter Controls -->
+            <div class="filter-controls">
+              <select id="difficultyFilter" class="filter-select">
+                <option value="">All Levels</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <select id="topicFilter" class="filter-select">
+                <option value="">All Topics</option>
+                <option value="joshua">Book of Joshua</option>
+                <option value="sabbath">Sabbath Truth</option>
+                <option value="sanctuary">Sanctuary</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Pagination Controls -->
+          <div class="pagination-info">
+            <span>Showing <span id="showing-count">6</span> of <span id="total-count">12</span> quizzes</span>
+          </div>
+          
+          <!-- Quiz Grid -->
+          <div class="quiz-grid" id="quiz-grid">
+            <!-- Sample quiz cards with icons, progress, and data attributes -->
+            <div class="quiz-card" data-difficulty="beginner" data-topic="joshua" data-status="completed">
+              <div class="quiz-icon">📖</div>
+              <div class="progress-indicator completed">✓</div>
+              <div class="quiz-header-info">
+                <h3>Recipe for Success — Joshua 1</h3>
+                <div class="quiz-stats">
+                  <span class="question-count">5 questions</span>
+                  <span class="best-score">Best: 95%</span>
+                  <span class="difficulty-badge beginner">Beginner</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 100%"></div>
+                </div>
+              </div>
+              <button class="quiz-start-btn completed">Review Quiz</button>
+            </div>
+            
+            <div class="quiz-card" data-difficulty="intermediate" data-topic="sabbath" data-status="in-progress">
+              <div class="quiz-icon">🕯️</div>
+              <div class="progress-indicator in-progress">⏳</div>
+              <div class="quiz-header-info">
+                <h3>The Sabbath Truth Quiz</h3>
+                <div class="quiz-stats">
+                  <span class="question-count">4 questions</span>
+                  <span class="best-score">Best: 75%</span>
+                  <span class="difficulty-badge intermediate">Intermediate</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 60%"></div>
+                </div>
+              </div>
+              <button class="quiz-start-btn in-progress">Continue Quiz</button>
+            </div>
+            
+            <div class="quiz-card" data-difficulty="advanced" data-topic="sanctuary" data-status="not-started">
+              <div class="quiz-icon">⛪</div>
+              <div class="progress-indicator not-started">○</div>
+              <div class="quiz-header-info">
+                <h3>Sanctuary Truth Assessment</h3>
+                <div class="quiz-stats">
+                  <span class="question-count">4 questions</span>
+                  <span class="best-score">Not attempted</span>
+                  <span class="difficulty-badge advanced">Advanced</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 0%"></div>
+                </div>
+              </div>
+              <button class="quiz-start-btn">Start Quiz</button>
+            </div>
+            
+            <div class="quiz-card" data-difficulty="beginner" data-topic="joshua" data-status="completed">
+              <div class="quiz-icon">🎁</div>
+              <div class="progress-indicator completed">✓</div>
+              <div class="quiz-header-info">
+                <h3>Surprised by Grace — Joshua 2</h3>
+                <div class="quiz-stats">
+                  <span class="question-count">7 questions</span>
+                  <span class="best-score">Best: 88%</span>
+                  <span class="difficulty-badge beginner">Beginner</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 100%"></div>
+                </div>
+              </div>
+              <button class="quiz-start-btn completed">Review Quiz</button>
+            </div>
+            
+            <div class="quiz-card" data-difficulty="intermediate" data-topic="joshua" data-status="not-started">
+              <div class="quiz-icon">🌊</div>
+              <div class="progress-indicator not-started">○</div>
+              <div class="quiz-header-info">
+                <h3>Crossing the Jordan — Joshua 3-4</h3>
+                <div class="quiz-stats">
+                  <span class="question-count">5 questions</span>
+                  <span class="best-score">Not attempted</span>
+                  <span class="difficulty-badge intermediate">Intermediate</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 0%"></div>
+                </div>
+              </div>
+              <button class="quiz-start-btn">Start Quiz</button>
+            </div>
+            
+            <div class="quiz-card" data-difficulty="advanced" data-topic="joshua" data-status="in-progress">
+              <div class="quiz-icon">⚔️</div>
+              <div class="progress-indicator in-progress">⏳</div>
+              <div class="quiz-header-info">
+                <h3>The Commander of the Lord's Army — Joshua 5</h3>
+                <div class="quiz-stats">
+                  <span class="question-count">5 questions</span>
+                  <span class="best-score">Best: 40%</span>
+                  <span class="difficulty-badge advanced">Advanced</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 30%"></div>
+                </div>
+              </div>
+              <button class="quiz-start-btn in-progress">Continue Quiz</button>
+            </div>
+          </div>
+          
+          <!-- Load More Button -->
+          <div class="pagination-controls">
+            <button id="load-more-btn" class="btn btn-secondary">Load More Quizzes</button>
+            <div class="pagination-stats">
+              <span>Page 1 of 2</span>
             </div>
           </div>
         </div>
@@ -372,6 +835,24 @@
         if (e.target.classList.contains('nav-tab')) {
           const tabId = e.target.dataset.tab;
           switchTab(tabId);
+          
+          // Initialize quiz features when switching to quiz tab
+          if (tabId === 'quizzes') {
+            setTimeout(initializeQuizFeatures, 100);
+          }
+        }
+        
+        // Handle quiz button clicks
+        if (e.target.classList.contains('quiz-start-btn')) {
+          const quizCard = e.target.closest('.quiz-card');
+          const quizTitle = quizCard.querySelector('h3').textContent;
+          const action = e.target.textContent.toLowerCase().replace(' ', '_');
+          
+          trackQuizInteraction(quizTitle, action);
+          
+          // Prevent actual navigation for demo
+          e.preventDefault();
+          alert(`Starting: ${quizTitle}\n\nThis would normally navigate to the quiz page.`);
         }
       });
       
@@ -474,6 +955,123 @@
           // User is signed out
           authSection.style.display = 'block';
           userProgress.style.display = 'none';
+        }
+      }
+      
+      // Quiz filtering and pagination functionality
+      let currentPage = 1;
+      const quizzesPerPage = 6;
+      let allQuizzes = [];
+      let filteredQuizzes = [];
+      
+      function initializeQuizFeatures() {
+        // Get all quiz cards
+        allQuizzes = Array.from(document.querySelectorAll('.quiz-card'));
+        filteredQuizzes = [...allQuizzes];
+        
+        // Set up filter listeners
+        const difficultyFilter = document.getElementById('difficultyFilter');
+        const topicFilter = document.getElementById('topicFilter');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        
+        if (difficultyFilter) {
+          difficultyFilter.addEventListener('change', applyFilters);
+        }
+        
+        if (topicFilter) {
+          topicFilter.addEventListener('change', applyFilters);
+        }
+        
+        if (loadMoreBtn) {
+          loadMoreBtn.addEventListener('click', loadMoreQuizzes);
+        }
+        
+        // Initial display
+        applyFilters();
+      }
+      
+      function applyFilters() {
+        const difficultyFilter = document.getElementById('difficultyFilter');
+        const topicFilter = document.getElementById('topicFilter');
+        
+        const selectedDifficulty = difficultyFilter?.value || '';
+        const selectedTopic = topicFilter?.value || '';
+        
+        // Filter quizzes based on selected criteria
+        filteredQuizzes = allQuizzes.filter(quiz => {
+          const quizDifficulty = quiz.dataset.difficulty || '';
+          const quizTopic = quiz.dataset.topic || '';
+          
+          const matchesDifficulty = !selectedDifficulty || quizDifficulty === selectedDifficulty;
+          const matchesTopic = !selectedTopic || quizTopic === selectedTopic;
+          
+          return matchesDifficulty && matchesTopic;
+        });
+        
+        // Reset to first page when filters change
+        currentPage = 1;
+        displayQuizzes();
+      }
+      
+      function displayQuizzes() {
+        const quizGrid = document.getElementById('quiz-grid');
+        const showingCount = document.getElementById('showing-count');
+        const totalCount = document.getElementById('total-count');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        
+        // Hide all quizzes first
+        allQuizzes.forEach(quiz => {
+          quiz.style.display = 'none';
+        });
+        
+        // Show filtered quizzes up to current page
+        const quizzesToShow = filteredQuizzes.slice(0, currentPage * quizzesPerPage);
+        quizzesToShow.forEach(quiz => {
+          quiz.style.display = 'block';
+        });
+        
+        // Update counters
+        if (showingCount) showingCount.textContent = Math.min(quizzesToShow.length, filteredQuizzes.length);
+        if (totalCount) totalCount.textContent = filteredQuizzes.length;
+        
+        // Update load more button
+        if (loadMoreBtn) {
+          if (quizzesToShow.length >= filteredQuizzes.length) {
+            loadMoreBtn.style.display = 'none';
+          } else {
+            loadMoreBtn.style.display = 'inline-block';
+            loadMoreBtn.textContent = `Load More Quizzes (${filteredQuizzes.length - quizzesToShow.length} remaining)`;
+          }
+        }
+        
+        // Update pagination stats
+        const paginationStats = document.querySelector('.pagination-stats span');
+        if (paginationStats) {
+          const totalPages = Math.ceil(filteredQuizzes.length / quizzesPerPage);
+          const currentPageDisplay = Math.min(currentPage, totalPages);
+          paginationStats.textContent = `Page ${currentPageDisplay} of ${totalPages || 1}`;
+        }
+      }
+      
+      function loadMoreQuizzes() {
+        currentPage++;
+        displayQuizzes();
+        
+        // Add GA4 event tracking
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'load_more_quizzes', {
+            'custom_parameter': 'page_' + currentPage
+          });
+        }
+      }
+      
+      // Add quiz interaction tracking
+      function trackQuizInteraction(quizTitle, action) {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'quiz_interaction', {
+            'quiz_title': quizTitle,
+            'action': action
+          });
         }
       }
       
