@@ -25,11 +25,26 @@
       gtag('config', 'G-DFBSX9SZHV');
     </script>
     
-    <!-- Firebase SDKs -->
-    <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/init.js"></script>
+    <!-- Firebase SDKs - Universal (works on both Firebase and Vercel) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAamVOgH_4fse26cxOURwLSOzeoKFwB8ws",
+        authDomain: "sabbaththeologylink.firebaseapp.com",
+        projectId: "sabbaththeologylink",
+        storageBucket: "sabbaththeologylink.firebasestorage.app",
+        messagingSenderId: "710694348415",
+        appId: "1:710694348415:web:f9bf6761128501725d414a"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
 
     <style>
       :root {
@@ -800,6 +815,9 @@
     </div>
     
     <div id="loading" class="loading">Initializing Firebase...</div>
+    
+    <!-- Debug info (remove in production) -->
+    <div id="debug-info" style="position: fixed; bottom: 10px; right: 10px; background: #f0f0f0; padding: 5px; font-size: 10px; border-radius: 3px; max-width: 300px; display: none;"></div>
 
     <script>
       // Global variables
@@ -807,27 +825,46 @@
       let firestore;
       let currentUser = null;
       
-      // Initialize Firebase when SDK is loaded
+      // Initialize Firebase when DOM is loaded
       document.addEventListener('DOMContentLoaded', function() {
         const loadingEl = document.getElementById('loading');
         
-        try {
-          // Initialize Firebase services
-          auth = firebase.auth();
-          firestore = firebase.firestore();
-          
-          // Set up auth state listener
-          auth.onAuthStateChanged(user => {
-            currentUser = user;
-            updateUIForUser(user);
-          });
-          
-          loadingEl.style.display = 'none';
-          console.log('Firebase initialized successfully');
-        } catch (e) {
-          console.error('Error initializing Firebase:', e);
-          loadingEl.textContent = 'Error loading Firebase';
-        }
+        // Add debug info
+        const debugEl = document.getElementById('debug-info');
+        const hostname = window.location.hostname;
+        const isFirebase = hostname.includes('web.app') || hostname.includes('firebaseapp.com');
+        const isVercel = hostname.includes('vercel.app');
+        
+        debugEl.innerHTML = `Host: ${hostname}<br>Firebase: ${isFirebase}<br>Vercel: ${isVercel}<br>Firebase available: ${typeof firebase !== 'undefined'}`;
+        debugEl.style.display = 'block';
+        
+        // Wait a bit for Firebase to fully load
+        setTimeout(function() {
+          try {
+            if (typeof firebase === 'undefined') {
+              throw new Error('Firebase SDK not loaded');
+            }
+            
+            // Initialize Firebase services
+            auth = firebase.auth();
+            firestore = firebase.firestore();
+            
+            // Set up auth state listener
+            auth.onAuthStateChanged(user => {
+              currentUser = user;
+              updateUIForUser(user);
+              debugEl.innerHTML += `<br>Auth: ${user ? 'Signed in as ' + user.email : 'Not signed in'}`;
+            });
+            
+            loadingEl.style.display = 'none';
+            console.log('Firebase initialized successfully');
+            debugEl.innerHTML += '<br>Status: ✅ Firebase OK';
+          } catch (e) {
+            console.error('Error initializing Firebase:', e);
+            loadingEl.textContent = 'Error loading Firebase: ' + e.message;
+            debugEl.innerHTML += '<br>Status: ❌ Error - ' + e.message;
+          }
+        }, 2000);
       });
       
       // Tab switching functionality
