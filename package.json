@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "build": "echo 'Static build complete'",
+    "start": "echo 'Static site ready'"
+  },
   "dependencies": {
-    "gtag": "^1.0.1"
+    "gtag": "^1.0.1",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }
