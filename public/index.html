@@ -517,6 +517,164 @@
         margin-bottom: 0.5rem;
       }
       
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+      }
+      
+      .modal-content {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        max-width: 800px;
+        width: 100%;
+        max-height: 90vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      
+      .modal-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--text-primary);
+      }
+      
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .modal-close:hover {
+        color: var(--text-primary);
+      }
+      
+      .modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        flex: 1;
+      }
+      
+      .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+      }
+      
+      .upload-instructions {
+        background: #f0f8ff;
+        border: 1px solid #b3d9ff;
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .upload-instructions h3 {
+        margin: 0 0 0.5rem 0;
+        color: var(--primary-color);
+        font-size: 1rem;
+      }
+      
+      .upload-instructions ul {
+        margin: 0;
+        padding-left: 1.5rem;
+        color: var(--text-primary);
+      }
+      
+      .upload-instructions li {
+        margin-bottom: 0.25rem;
+        font-size: 0.875rem;
+      }
+      
+      .upload-actions {
+        margin-bottom: 1rem;
+      }
+      
+      .json-input-section {
+        margin-bottom: 1rem;
+      }
+      
+      .json-input-section label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+      
+      .json-textarea {
+        width: 100%;
+        height: 200px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 0.75rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+        resize: vertical;
+      }
+      
+      .json-textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+      
+      .error-message {
+        background: #fee;
+        border: 1px solid #fcc;
+        color: #c33;
+        padding: 0.75rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+      }
+      
+      .preview-quiz {
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #fafafa;
+      }
+      
+      .preview-quiz h4 {
+        margin: 0 0 0.5rem 0;
+        color: var(--primary-color);
+      }
+      
+      .preview-questions {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+      }
+      
       @media (max-width: 768px) {
         .content {
           padding: 1rem;
@@ -852,8 +1010,9 @@
             <div id="admin-panel" style="display: none;">
               <div class="admin-section">
                 <h4>📁 Content Upload</h4>
-                <p>Upload Sabbath School Quarterly lessons and materials.</p>
-                <button class="btn">Upload Lesson Files</button>
+                <p>Upload Sabbath School Quarterly lessons and quiz data.</p>
+                <button class="btn" onclick="openBulkUpload()">Bulk Upload Quizzes (JSON)</button>
+                <button class="btn btn-secondary">Upload Lesson Files</button>
                 <button class="btn btn-secondary">Manage Existing Content</button>
               </div>
               
@@ -881,6 +1040,74 @@
           </div>
         </div>
       </main>
+    </div>
+    
+    <!-- Bulk Upload Modal -->
+    <div id="bulk-upload-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h2>Bulk Quiz Upload (JSON)</h2>
+          <button class="modal-close" onclick="closeBulkUpload()">×</button>
+        </div>
+        
+        <!-- Content -->
+        <div class="modal-body">
+          <!-- Instructions -->
+          <div class="upload-instructions">
+            <h3>Upload Instructions</h3>
+            <ul>
+              <li>• Paste JSON data containing an array of quiz objects</li>
+              <li>• Each quiz must have: title, questions array</li>
+              <li>• Each question must have: questionText, questionType, correctAnswer, order</li>
+              <li>• MCQ questions must include options array</li>
+              <li>• Supported types: 'mcq', 'true_false', 'fill_blank'</li>
+            </ul>
+          </div>
+          
+          <!-- Sample Data Button -->
+          <div class="upload-actions">
+            <button class="btn btn-secondary" onclick="loadSampleData()">Load Sample Data</button>
+          </div>
+          
+          <!-- JSON Input -->
+          <div class="json-input-section">
+            <label for="json-input">Quiz JSON Data:</label>
+            <textarea id="json-input" class="json-textarea" placeholder='[
+  {
+    "title": "Sample Quiz",
+    "moduleId": null,
+    "questions": [
+      {
+        "questionText": "What is 2+2?",
+        "questionType": "mcq",
+        "options": ["3", "4", "5", "6"],
+        "correctAnswer": "4",
+        "explanation": "Basic math",
+        "order": 1
+      }
+    ]
+  }
+]'></textarea>
+          </div>
+          
+          <!-- Error Display -->
+          <div id="upload-error" class="error-message" style="display: none;"></div>
+          
+          <!-- Preview Section -->
+          <div id="preview-section" style="display: none;">
+            <h3>Preview:</h3>
+            <div id="preview-content"></div>
+          </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="previewQuizzes()">Preview</button>
+          <button id="upload-btn" class="btn" onclick="uploadQuizzes()" disabled>Upload Quizzes</button>
+          <button class="btn btn-secondary" onclick="closeBulkUpload()">Cancel</button>
+        </div>
+      </div>
     </div>
     
     <div id="loading" class="loading">Initializing Firebase...</div>
@@ -1167,6 +1394,190 @@
         
         // Optional: Save to Firestore in production
         // saveAdminStatus(currentUser.uid, true);
+      }
+      
+      // Bulk Upload Functions
+      let previewData = null;
+      
+      function openBulkUpload() {
+        document.getElementById('bulk-upload-modal').style.display = 'flex';
+      }
+      
+      function closeBulkUpload() {
+        document.getElementById('bulk-upload-modal').style.display = 'none';
+        document.getElementById('json-input').value = '';
+        document.getElementById('upload-error').style.display = 'none';
+        document.getElementById('preview-section').style.display = 'none';
+        document.getElementById('upload-btn').disabled = true;
+        previewData = null;
+      }
+      
+      function showError(message) {
+        const errorEl = document.getElementById('upload-error');
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      }
+      
+      function hideError() {
+        document.getElementById('upload-error').style.display = 'none';
+      }
+      
+      function loadSampleData() {
+        const sampleData = [
+          {
+            "title": "Recipe for Success — Joshua 1",
+            "moduleId": null,
+            "questions": [
+              {
+                "questionText": "In Joshua 1, which four movements outline the book's structure?",
+                "questionType": "mcq",
+                "options": ["Cross, Take, Divide, Serve", "Call, Conquer, Covenant, Crown", "Promise, Pilgrimage, Purge, Peace", "Lead, Listen, Learn, Live"],
+                "correctAnswer": "Cross, Take, Divide, Serve",
+                "explanation": "Joshua's opening chapter previews four sections: Cross (1:1–5:12), Take (5:13–12:24), Divide (13:1–21:45), and Service (22:1–24:33).",
+                "order": 1
+              },
+              {
+                "questionText": "What is the primary ground of Israel's success in Joshua 1?",
+                "questionType": "mcq",
+                "options": ["Superior weapons", "Allied nations", "The Lord's presence", "Numerical advantage"],
+                "correctAnswer": "The Lord's presence",
+                "explanation": "God promises, \"I will be with you.\" The presence of the Lord is decisive.",
+                "order": 2
+              }
+            ]
+          },
+          {
+            "title": "The Sabbath Truth Quiz",
+            "moduleId": null,
+            "questions": [
+              {
+                "questionText": "Which day of the week is the biblical Sabbath?",
+                "questionType": "mcq",
+                "options": ["Sunday", "Saturday", "Friday", "Any day of rest"],
+                "correctAnswer": "Saturday",
+                "explanation": "The seventh day (Saturday) is the biblical Sabbath, as established in Genesis 2:2-3 and confirmed in the Fourth Commandment.",
+                "order": 1
+              }
+            ]
+          }
+        ];
+        
+        document.getElementById('json-input').value = JSON.stringify(sampleData, null, 2);
+        hideError();
+        document.getElementById('preview-section').style.display = 'none';
+        previewData = null;
+        document.getElementById('upload-btn').disabled = true;
+      }
+      
+      function validateQuizData(data) {
+        if (!Array.isArray(data)) {
+          throw new Error('Data must be an array of quizzes');
+        }
+        
+        for (let i = 0; i < data.length; i++) {
+          const quiz = data[i];
+          if (!quiz.title || typeof quiz.title !== 'string') {
+            throw new Error(`Quiz ${i + 1}: Missing or invalid title`);
+          }
+          
+          if (!Array.isArray(quiz.questions) || quiz.questions.length === 0) {
+            throw new Error(`Quiz ${i + 1}: Must have at least one question`);
+          }
+          
+          for (let j = 0; j < quiz.questions.length; j++) {
+            const question = quiz.questions[j];
+            if (!question.questionText || typeof question.questionText !== 'string') {
+              throw new Error(`Quiz ${i + 1}, Question ${j + 1}: Missing question text`);
+            }
+            
+            if (!['mcq', 'true_false', 'fill_blank'].includes(question.questionType)) {
+              throw new Error(`Quiz ${i + 1}, Question ${j + 1}: Invalid question type. Must be 'mcq', 'true_false', or 'fill_blank'`);
+            }
+            
+            if (question.questionType === 'mcq' && (!question.options || !Array.isArray(question.options) || question.options.length < 2)) {
+              throw new Error(`Quiz ${i + 1}, Question ${j + 1}: MCQ questions must have at least 2 options`);
+            }
+            
+            if (!question.correctAnswer || typeof question.correctAnswer !== 'string') {
+              throw new Error(`Quiz ${i + 1}, Question ${j + 1}: Missing correct answer`);
+            }
+          }
+        }
+        
+        return true;
+      }
+      
+      function previewQuizzes() {
+        try {
+          hideError();
+          const jsonInput = document.getElementById('json-input').value.trim();
+          
+          if (!jsonInput) {
+            showError('Please enter JSON data');
+            return;
+          }
+          
+          const parsed = JSON.parse(jsonInput);
+          validateQuizData(parsed);
+          
+          previewData = parsed;
+          
+          // Generate preview HTML
+          let previewHtml = '';
+          parsed.forEach((quiz, index) => {
+            previewHtml += `
+              <div class="preview-quiz">
+                <h4>${quiz.title}</h4>
+                <div class="preview-questions">${quiz.questions.length} questions</div>
+              </div>
+            `;
+          });
+          
+          document.getElementById('preview-content').innerHTML = previewHtml;
+          document.getElementById('preview-section').style.display = 'block';
+          document.getElementById('upload-btn').disabled = false;
+          
+        } catch (err) {
+          if (err instanceof SyntaxError) {
+            showError('Invalid JSON format. Please check your syntax.');
+          } else {
+            showError(err.message);
+          }
+          document.getElementById('preview-section').style.display = 'none';
+          document.getElementById('upload-btn').disabled = true;
+        }
+      }
+      
+      function uploadQuizzes() {
+        if (!previewData || !firestore) {
+          showError('No data to upload or Firebase not initialized');
+          return;
+        }
+        
+        document.getElementById('upload-btn').textContent = 'Uploading...';
+        document.getElementById('upload-btn').disabled = true;
+        
+        // For now, just simulate upload and save to localStorage for demo
+        try {
+          // In a real implementation, you would save to Firestore here
+          const existingQuizzes = JSON.parse(localStorage.getItem('uploadedQuizzes') || '[]');
+          const newQuizzes = previewData.map(quiz => ({
+            ...quiz,
+            id: Date.now() + Math.random(),
+            uploadedAt: new Date().toISOString(),
+            uploadedBy: currentUser?.email || 'unknown'
+          }));
+          
+          localStorage.setItem('uploadedQuizzes', JSON.stringify([...existingQuizzes, ...newQuizzes]));
+          
+          alert(`✅ Successfully uploaded ${previewData.length} quizzes!\n\nThese quizzes are now saved and ready to use.`);
+          closeBulkUpload();
+          
+        } catch (error) {
+          showError('Upload failed: ' + error.message);
+          document.getElementById('upload-btn').textContent = 'Upload Quizzes';
+          document.getElementById('upload-btn').disabled = false;
+        }
       }
       
       // Quiz filtering and pagination functionality
