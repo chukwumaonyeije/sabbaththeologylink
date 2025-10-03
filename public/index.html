@@ -825,6 +825,25 @@
       let firestore;
       let currentUser = null;
       
+      // Handle URL-based routing (for direct /admin access)
+      function handleRouting() {
+        const path = window.location.pathname;
+        const hash = window.location.hash;
+        
+        // Check if accessing /admin directly
+        if (path.includes('/admin') || hash === '#admin') {
+          switchTab('admin');
+        } else if (path.includes('/quizzes') || hash === '#quizzes') {
+          switchTab('quizzes');
+          setTimeout(initializeQuizFeatures, 100);
+        } else if (path.includes('/progress') || hash === '#progress') {
+          switchTab('progress');
+        } else {
+          // Default to modules
+          switchTab('modules');
+        }
+      }
+      
       // Initialize Firebase when DOM is loaded
       document.addEventListener('DOMContentLoaded', function() {
         const loadingEl = document.getElementById('loading');
@@ -859,6 +878,9 @@
             loadingEl.style.display = 'none';
             console.log('Firebase initialized successfully');
             debugEl.innerHTML += '<br>Status: ✅ Firebase OK';
+            
+            // Handle initial routing after Firebase is ready
+            handleRouting();
           } catch (e) {
             console.error('Error initializing Firebase:', e);
             loadingEl.textContent = 'Error loading Firebase: ' + e.message;
@@ -903,8 +925,16 @@
         });
         
         // Add active class to selected tab and panel
-        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-        document.getElementById(tabId).classList.add('active');
+        const targetTab = document.querySelector(`[data-tab="${tabId}"]`);
+        const targetPanel = document.getElementById(tabId);
+        
+        if (targetTab && targetPanel) {
+          targetTab.classList.add('active');
+          targetPanel.classList.add('active');
+          
+          // Update URL hash for bookmarking
+          window.history.replaceState(null, null, '#' + tabId);
+        }
       }
       
       // Authentication functions
